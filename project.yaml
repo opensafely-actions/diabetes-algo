@@ -8,7 +8,7 @@ actions:
         dataset: output/input.csv
 
   data_process:
-    run: r:v2 analysis/data_process.R
+    run: r:v2 analysis/data_process.R --df_input input.csv
     needs:
     - generate_dataset
     outputs:
@@ -16,3 +16,20 @@ actions:
         rds: output/data_processed.rds
       #moderately_sensitive:
       #  arguments: output/args-data_processed.csv
+
+  generate_dataset_2:
+      run: ehrql:v1 generate-dataset analysis/dataset_definition.py --output output/input2.csv
+      outputs:
+        highly_sensitive:
+          dataset: output/input2.csv
+  
+  data_process_2:
+    run: r:v2 analysis/data_process.R
+    config:
+      df_input: input2.csv
+      df_output: data_processed_2.rds
+    needs:
+    - generate_dataset_2
+    outputs:
+      highly_sensitive:
+        rds: output/data_processed_2.rds

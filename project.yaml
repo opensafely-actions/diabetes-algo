@@ -47,3 +47,17 @@ actions:
     outputs:
       highly_sensitive:
         rds: output/data_processed_3.rds
+
+  generate_dataset_4:
+          run: ehrql:v1 generate-dataset analysis/dataset_definition.py --output output/input4.csv.gz
+          outputs:
+            highly_sensitive:
+              dataset: output/input4.csv.gz
+      
+  data_process_4:
+    run: r:v2 analysis/data_process.R --df_input input4.csv.gz --df_output data_processed_4.rds
+    needs:
+    - generate_dataset_4
+    outputs:
+      highly_sensitive:
+        rds: output/data_processed_4.rds

@@ -101,10 +101,19 @@ option_list <- list(
               metavar = "YYYY-MM-DD"),
   make_option("--df_output", type = "character", default = "data_processed.rds",
               help = "Output dataset. rds file. This is assumed to be added to the directory 'output' [default %default]",
-              metavar = "filename.rds")
+              metavar = "filename.rds"),
+  make_option("--config", type = "character", default = "",
+              help = "Config parsed from the YAML",
+              metavar = "")
 )
 opt_parser <- OptionParser(usage = "diabetes-algo:[version] [options]", option_list = option_list)
 opt <- parse_args(opt_parser)
+
+# Parse the config from YAML
+if (opt$config != "") {
+  config <- jsonlite::fromJSON(opt$config)
+  opt <- modifyList(opt, config)
+}
 
 ################################################################################
 # Record input arguments

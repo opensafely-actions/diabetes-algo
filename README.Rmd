@@ -80,6 +80,22 @@ diabetes_algo:
       rds: output/data_processed.rds
 ```
 
+Options can also be specified using a `config:` key in the YAML as follows.
+Options specified in the config overwrite those specified at the command line.
+
+```yaml
+  data_process_2:
+    run: diabetes-algo:[version]
+    config:
+      df_input: input2.csv
+      df_output: data_processed_2.rds
+    needs:
+    - generate_dataset_2
+    outputs:
+      highly_sensitive:
+        rds: output/data_processed_2.rds
+```
+
 For more information about reusable actions see [here](https://docs.opensafely.org/actions-reusable/).
 
 # About the OpenSAFELY framework

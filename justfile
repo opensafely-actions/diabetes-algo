@@ -8,3 +8,5 @@ test-2:
     opensafely run generate_dataset_2 data_process_2 -f
 test-3:
     opensafely run generate_dataset_3 data_process_3 -f
+test-4:
+    opensafely run generate_dataset_4 data_process_4 -f

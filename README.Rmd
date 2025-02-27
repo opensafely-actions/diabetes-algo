@@ -56,14 +56,14 @@ This action can be specified in the `project.yaml` with its options at their def
 where you should replace `[version]` with the latest tag from 
 [here](xy), e.g., `v0.0.1`. 
 Note that no space is allowed between `diabetes-algo:` and `[version]`.
-This action can be run specifying input arguments as follows (in YAML > indicates to treat the subsequent nested lines as a single line).
+This action can be run specifying input arguments as follows (in YAML ">" indicates to treat the subsequent nested lines as a single line).
 
 ```yaml
 generate_dataset:
-    run: ehrql:v1 generate-dataset analysis/dataset_definition.py --output output/input.csv
+    run: ehrql:v1 generate-dataset analysis/dataset_definition.py --output output/input.arrow
     outputs:
       highly_sensitive:
-        dataset: output/input.csv
+        dataset: output/input.arrow
 
 diabetes_algo:
   run: >
@@ -80,20 +80,29 @@ diabetes_algo:
       rds: output/data_processed.rds
 ```
 
-Options can also be specified using a `config:` key in the YAML as follows.
-Options specified in the config overwrite those specified at the command line.
+Alternatively, the input arguments can also be specified using a `config:` key in the YAML as follows.
+Input arguments specified in the config overwrite those specified at the command line.
 
 ```yaml
-  data_process_2:
-    run: diabetes-algo:[version]
-    config:
-      df_input: input2.csv
-      df_output: data_processed_2.rds
-    needs:
-    - generate_dataset_2
+generate_dataset:
+    run: ehrql:v1 generate-dataset analysis/dataset_definition.py --output output/input.arrow
     outputs:
       highly_sensitive:
-        rds: output/data_processed_2.rds
+        dataset: output/input.arrow
+
+diabetes_algo_via_config:
+  run: diabetes-algo:[version]
+  config:
+      df_input: input.arrow
+      birth_date: your_dob_date_variable
+      tmp_t1dm_ctv3_date: your_t2dm_from_primcare_date_variable
+      ## more arguments
+      df_output: data_processed.rds
+  needs:
+  - generate_dataset
+  outputs:
+    highly_sensitive:
+      rds: output/data_processed.rds
 ```
 
 For more information about reusable actions see [here](https://docs.opensafely.org/actions-reusable/).

@@ -24,10 +24,7 @@ actions:
           dataset: output/input2.csv
   
   data_process_2:
-    run: r:v2 analysis/data_process.R
-    config:
-      df_input: input2.csv
-      df_output: data_processed_2.rds
+    run: r:v2 analysis/data_process.R --df_input input2.csv --df_output data_processed_2.rds
     needs:
     - generate_dataset_2
     outputs:
@@ -41,7 +38,10 @@ actions:
             dataset: output/input.arrow
     
   data_process_3:
-    run: r:v2 analysis/data_process.R --df_input input.arrow --df_output data_processed_3.rds
+    run: r:v2 analysis/data_process.R
+    config:
+      df_input: input.arrow
+      df_output: data_processed_3.rds
     needs:
     - generate_dataset_3
     outputs:

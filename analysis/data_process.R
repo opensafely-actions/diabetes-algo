@@ -34,7 +34,7 @@ source(here::here("analysis", "functions", "fn_diabetes_algorithm.R"))
 library('optparse')
 option_list <- list(
   make_option("--df_input", type = "character", default = "input.csv",
-              help = "Input dataset. csv file. Assumed to be within the directory 'output' [default %default]",
+              help = "Input dataset. csv, csv.gz, rds, arrow, or a feather file. Assumed to be within the directory 'output' [default %default]",
               metavar = "filename.csv"),
   make_option("--remove_helper", type = "logical", default = TRUE,
               help = "Logical, indicating whether all helper variables (_tmp and step_) are removed [default %default]",
@@ -101,10 +101,19 @@ option_list <- list(
               metavar = "YYYY-MM-DD"),
   make_option("--df_output", type = "character", default = "data_processed.rds",
               help = "Output dataset. rds file. This is assumed to be added to the directory 'output' [default %default]",
-              metavar = "filename.rds")
+              metavar = "filename.rds"),
+  make_option("--config", type = "character", default = "",
+              help = "Config parsed from the YAML",
+              metavar = "")
 )
 opt_parser <- OptionParser(usage = "diabetes-algo:[version] [options]", option_list = option_list)
 opt <- parse_args(opt_parser)
+
+# Parse the config from YAML
+if (opt$config != "") {
+  config <- jsonlite::fromJSON(opt$config)
+  opt <- modifyList(opt, config)
+}
 
 ################################################################################
 # Record input arguments
@@ -119,11 +128,16 @@ row.names(record_args) <- NULL
 # Load data
 ################################################################################
 print("Load data")
-if (grepl(".csv",opt$df_input)) {
-  data <- readr::read_csv(paste0("output/", opt$df_input))
+if (grepl(".csv.gz", opt$df_input)) {
+  R.utils::gunzip(paste0("output/", opt$df_input), remove = FALSE)
+  opt$df_input <- substr(opt$df_input, 1, nchar(opt$df_input) - 3)
 }
-if (grepl(".rds",opt$df_input)) {
+if (grepl(".csv", opt$df_input)) {
+  data <- readr::read_csv(paste0("output/", opt$df_input))
+} else if (grepl(".rds", opt$df_input)) {
   data <- readr::read_rds(paste0("output/", opt$df_input))
+} else if (grepl(".feather", opt$df_input) || grepl(".arrow", opt$df_input)) {
+  data <- arrow::read_feather(paste0("output/", opt$df_input))
 }
 print(summary(data))
 

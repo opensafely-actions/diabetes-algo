@@ -246,7 +246,7 @@ core <- core %>%
 # Apply the diabetes algorithm
 ################################################################################
 print("Apply the diabetes algorithm and delete all tmp & step variables")
-core <- fn_diabetes_algorithm(core)
+core <- fn_diabetes_algorithm(core, column_mapping)
 
 ################################################################################
 # Merge the core back to the user data

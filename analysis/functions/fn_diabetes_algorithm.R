@@ -1,4 +1,13 @@
-fn_diabetes_algorithm <- function(data) {
+fn_diabetes_algorithm <- function(data, column_mapping) {
+  # Ensure only non-null mappings are considered
+  valid_mappings <- column_mapping[!sapply(column_mapping, is.null)]
+
+  # Reverse mapping: user-defined name → standardized name
+  rename_list <- setNames(names(valid_mappings), unlist(valid_mappings))
+
+  # Rename columns dynamically
+  data <- data %>% rename(!!!rename_list)
+
   data <- data %>%
     mutate(
     ## --- Step 0: Temporary helper variables ---

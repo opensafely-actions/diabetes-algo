@@ -1,12 +1,27 @@
 fn_diabetes_algorithm <- function(data, column_mapping) {
-  # Ensure only non-null mappings are considered
-  valid_mappings <- column_mapping[!sapply(column_mapping, is.null)]
-
-  # Reverse mapping: user-defined name → standardized name
-  rename_list <- setNames(names(valid_mappings), unlist(valid_mappings))
-
-  # Rename columns dynamically
-  data <- data %>% rename(!!!rename_list)
+  data <- data %>%
+    rename(
+      birth_date = all_of(column_mapping$birth_date),
+      ethnicity_cat = all_of(column_mapping$ethnicity_cat),
+      tmp_t1dm_ctv3_date = all_of(column_mapping$tmp_t1dm_ctv3_date),
+      t1dm_date = all_of(column_mapping$t1dm_date),
+      tmp_t1dm_count_num = all_of(column_mapping$tmp_t1dm_count_num),
+      tmp_t2dm_ctv3_date = all_of(column_mapping$tmp_t2dm_ctv3_date),
+      t2dm_date = all_of(column_mapping$t2dm_date),
+      tmp_t2dm_count_num = all_of(column_mapping$tmp_t2dm_count_num),
+      otherdm_date = all_of(column_mapping$otherdm_date),
+      tmp_otherdm_count_num = all_of(column_mapping$tmp_otherdm_count_num),
+      gestationaldm_date = all_of(column_mapping$gestationaldm_date),
+      tmp_poccdm_date = all_of(column_mapping$tmp_poccdm_date),
+      tmp_poccdm_ctv3_count_num = all_of(column_mapping$tmp_poccdm_ctv3_count_num),
+      tmp_max_hba1c_mmol_mol_num = all_of(column_mapping$tmp_max_hba1c_mmol_mol_num),
+      tmp_max_hba1c_date = all_of(column_mapping$tmp_max_hba1c_date),
+      tmp_insulin_dmd_date = all_of(column_mapping$tmp_insulin_dmd_date),
+      tmp_antidiabetic_drugs_dmd_date = all_of(column_mapping$tmp_antidiabetic_drugs_dmd_date),
+      tmp_nonmetform_drugs_dmd_date = all_of(column_mapping$tmp_nonmetform_drugs_dmd_date),
+      tmp_diabetes_medication_date = all_of(column_mapping$tmp_diabetes_medication_date),
+      tmp_first_diabetes_diag_date = all_of(column_mapping$tmp_first_diabetes_diag_date)
+      )
 
   data <- data %>%
     mutate(

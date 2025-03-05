@@ -41,9 +41,7 @@ dataset.define_population(patients.exists_for_patient())
 #######################################################################################
 # DEFINE necessary variables to build algo
 #######################################################################################
-## See https://github.com/opensafely/post-covid-diabetes/blob/main/analysis/common_variables.py 
-## See xxx
-## add emergency table?
+## See https://github.com/opensafely/post-covid-diabetes/blob/main/analysis/common_variables.py
 
 ## Demographics
 dataset.birth_date = patients.date_of_birth

@@ -8,12 +8,12 @@ actions:
         dataset: output/input.csv
 
   data_process:
-    run: r:v2 analysis/data_process.R --df_input input.csv
+    run: r:v2 analysis/data_process.R --df_input input.csv --df_output data_processed.csv.gz
     needs:
     - generate_dataset
     outputs:
       highly_sensitive:
-        rds: output/data_processed.rds
+        csv.gz: output/data_processed.csv.gz
       #moderately_sensitive:
       #  arguments: output/args-data_processed.csv
 
@@ -24,12 +24,12 @@ actions:
           dataset: output/input2.csv
   
   data_process_2:
-    run: r:v2 analysis/data_process.R --df_input input2.csv --df_output data_processed_2.rds
+    run: r:v2 analysis/data_process.R --df_input input2.csv --df_output data_processed_2.csv.gz
     needs:
     - generate_dataset_2
     outputs:
       highly_sensitive:
-        rds: output/data_processed_2.rds
+        csv.gz: output/data_processed_2.csv.gz
 
   generate_dataset_3:
         run: ehrql:v1 generate-dataset analysis/dataset_definition.py --output output/input.arrow
@@ -41,12 +41,12 @@ actions:
     run: r:v2 analysis/data_process.R
     config:
       df_input: input.arrow
-      df_output: data_processed_3.rds
+      df_output: data_processed_3.csv.gz
     needs:
     - generate_dataset_3
     outputs:
       highly_sensitive:
-        rds: output/data_processed_3.rds
+        csv.gz: output/data_processed_3.csv.gz
 
   generate_dataset_4:
           run: ehrql:v1 generate-dataset analysis/dataset_definition.py --output output/input4.csv.gz
@@ -55,9 +55,9 @@ actions:
               dataset: output/input4.csv.gz
       
   data_process_4:
-    run: r:v2 analysis/data_process.R --df_input input4.csv.gz --df_output data_processed_4.rds
+    run: r:v2 analysis/data_process.R --df_input input4.csv.gz --df_output data_processed_4.csv.gz
     needs:
     - generate_dataset_4
     outputs:
       highly_sensitive:
-        rds: output/data_processed_4.rds
+        csv.gz: output/data_processed_4.csv.gz

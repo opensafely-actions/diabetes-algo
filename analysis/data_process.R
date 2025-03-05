@@ -12,7 +12,7 @@
 # 10 Save output dataset (data_processed.rds)
 ################################################################################
 
-print("diabetes-algo version: v0.0.2")
+print("diabetes-algo version: v0.0.3")
 
 ################################################################################
 # Import libraries and functions
@@ -99,9 +99,9 @@ option_list <- list(
   make_option("--tmp_first_diabetes_diag_date", type = "character", default = "tmp_first_diabetes_diag_date",
               help = "First diabetes diagnosis date variable, i.e. minimum of t1dm_date, t2dm_date, otherdm_date, gestationaldm_date, tmp_poccdm_date, tmp_nonmetform_drugs_dmd_date, and tmp_diabetes_medication_date [default %default]",
               metavar = "YYYY-MM-DD"),
-  make_option("--df_output", type = "character", default = "data_processed.rds",
-              help = "Output dataset. rds file. This is assumed to be added to the directory 'output' [default %default]",
-              metavar = "filename.rds"),
+  make_option("--df_output", type = "character", default = "data_processed.csv.gz",
+              help = "Output dataset. csv.gz file. This is assumed to be added to the directory 'output' [default %default]",
+              metavar = "filename.csv.gz"),
   make_option("--config", type = "character", default = "",
               help = "Config parsed from the YAML",
               metavar = "")
@@ -268,3 +268,4 @@ data_processed <- merge(non_core, core,
 ################################################################################
 print("Save output")
 write_rds(data_processed, paste0("output/", opt$df_output))
+write.csv(data_processed, gzfile(paste0("output/", opt$df_output, ".csv.gz")), row.names = FALSE)

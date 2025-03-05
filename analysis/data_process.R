@@ -100,7 +100,7 @@ option_list <- list(
               help = "First diabetes diagnosis date variable, i.e. minimum of t1dm_date, t2dm_date, otherdm_date, gestationaldm_date, tmp_poccdm_date, tmp_nonmetform_drugs_dmd_date, and tmp_diabetes_medication_date [default %default]",
               metavar = "YYYY-MM-DD"),
   make_option("--df_output", type = "character", default = "data_processed.csv.gz",
-              help = "Output dataset. csv.gz file. This is assumed to be added to the directory 'output' [default %default]",
+              help = "Output dataset. csv.gz or rds file. This is assumed to be added to the directory 'output' [default %default]",
               metavar = "filename.csv.gz"),
   make_option("--config", type = "character", default = "",
               help = "Config parsed from the YAML",

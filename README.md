@@ -134,9 +134,9 @@ input variables, find
     tmp_nonmetform_drugs_dmd_date, and tmp_diabetes_medication_date [default
     tmp_first_diabetes_diag_date]
 
-    --df_output=FILENAME.RDS
-    Output dataset. rds file. This is assumed to be added to the directory 'output'
-    [default data_processed.rds]
+    --df_output=FILENAME.CSV.GZ
+    Output dataset. csv.gz or rds file. This is assumed to be added to the
+    directory 'output' [default data_processed.csv.gz]
 
     --config=
     Config parsed from the YAML
@@ -176,12 +176,12 @@ diabetes_algo:
       --tmp_t1dm_ctv3_date=your_t2dm_from_primcare_date_variable
       --tmp_max_hba1c_mmol_mol_num=your_max_hba1c_num_variable
       --## more arguments
-      --df_output=data_processed.csv.gz
+      --df_output=data_processed.csv.gz #or data_processed.rds
   needs:
   - generate_dataset
   outputs:
     highly_sensitive:
-      csv.gz: output/data_processed.csv.gz
+      csv.gz: output/data_processed.csv.gz #or data_processed.rds
 ```
 
 Alternatively, the input arguments can also be specified using a
@@ -202,12 +202,12 @@ diabetes_algo_via_config:
       birth_date: your_dob_date_variable
       tmp_t1dm_ctv3_date: your_t2dm_from_primcare_date_variable
       ## more arguments
-      df_output: data_processed.csv.gz
+      df_output: data_processed.csv.gz #or data_processed.rds
   needs:
   - generate_dataset
   outputs:
     highly_sensitive:
-      csv.gz: output/data_processed.csv.gz
+      csv.gz: output/data_processed.csv.gz #or data_processed.rds
 ```
 
 For more information about reusable actions see

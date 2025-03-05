@@ -268,4 +268,4 @@ data_processed <- merge(non_core, core,
 ################################################################################
 print("Save output")
 write_rds(data_processed, paste0("output/", opt$df_output))
-write.csv(data_processed, gzfile(paste0("output/", opt$df_output, ".csv.gz")), row.names = FALSE)
+write_csv(data_processed, here::here("output", paste0(opt$df_output, ".csv.gz")), na = "") # important to specify (na = ""), otherwise @table_from_file("output/data/data_processed.csv.gz") doesn't work (accepts empty or a date, but not NA)

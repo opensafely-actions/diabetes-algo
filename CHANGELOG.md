@@ -1,6 +1,7 @@
 # [v0.0.5](https://github.com/opensafely-actions/diabetes-algo/releases/tag/v0.0.5)
 
 * Updated CHANGELOG
+* Updated main.yml to fix race condition in GHA workflow
 
 # [v0.0.4](https://github.com/opensafely-actions/diabetes-algo/releases/tag/v0.0.4)
 

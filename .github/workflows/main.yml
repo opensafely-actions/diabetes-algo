@@ -6,6 +6,11 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write
+
+concurrency: tag-new-version-group
+
 jobs:
   test-integration:
     runs-on: ubuntu-latest

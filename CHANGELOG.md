@@ -1,3 +1,8 @@
+# [v0.0.6](https://github.com/opensafely-actions/diabetes-algo/releases/tag/v0.0.6)
+
+* Updated CHANGELOG
+* Updated ethnicity variable label "South Asian" to "Asian" as per latest work on this topic in OpenSAFELY (https://pubmed.ncbi.nlm.nih.gov/38987774/). Correct codelist already in use.
+
 # [v0.0.5](https://github.com/opensafely-actions/diabetes-algo/releases/tag/v0.0.5)
 
 * Updated CHANGELOG

@@ -12,7 +12,7 @@
 # 10 Save output dataset (data_processed.rds)
 ################################################################################
 
-print("diabetes-algo version: v0.0.5")
+print("diabetes-algo version: v0.0.6")
 
 ################################################################################
 # Import libraries and functions
@@ -43,7 +43,7 @@ option_list <- list(
               help = "Birth date [default %default]",
               metavar = "YYYY-MM-DD"),
   make_option("--ethnicity_cat", type = "character", default = "ethnicity_cat",
-              help = "Ethnicity, in 6 categories, coded as follows: White, Mixed, South Asian, Black, Other, Unknown. [default %default]",
+              help = "Ethnicity, in 6 categories, coded as follows: White, Mixed, Asian, Black, Other, Unknown. Guidance (https://pubmed.ncbi.nlm.nih.gov/38987774/) [default %default]",
               metavar = "ethnicity_varname"),
   make_option("--t1dm_date", type = "character", default = "t1dm_date",
               help = "First type 1 DM diagnosis date, from both primary (e.g. https://www.opencodelists.org/codelist/user/hjforbes/type-1-diabetes/674fbd7a/) and secondary (e.g. https://www.opencodelists.org/codelist/opensafely/type-1-diabetes-secondary-care/2020-09-27/) care [default %default]",
@@ -217,7 +217,7 @@ if (any(invalid_numerics)) {
 print("validation passed: all numeric values are coded as numeric")
 
 print("Check the ethnicity variable")
-valid_ethnicities <- c("White", "Mixed", "South Asian", "Black", "Unknown", "Other")
+valid_ethnicities <- c("White", "Mixed", "Asian", "Black", "Unknown", "Other")
 # Identify invalid values (including NA, since this should be coded as "Unknown")
 invalid_ethnicity <- core$ethnicity_cat[is.na(core$ethnicity_cat) |
                                           !(core$ethnicity_cat %in% valid_ethnicities)]
@@ -226,7 +226,7 @@ if (length(invalid_ethnicity) > 0) {
   stop(paste(
     "The 'ethnicity_cat' column contains invalid values:",
     paste(unique(invalid_ethnicity), collapse = ", "),
-    "\nValid values are: White, Mixed, South Asian, Black, Unknown, Other. NA values are not allowed."
+    "\nValid values are: White, Mixed, Asian, Black, Unknown, Other. NA values are not allowed."
   ))
 }
 print("'ethnicity_cat' validation passed: all values are valid categories (NA not allowed).")

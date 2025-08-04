@@ -12,7 +12,7 @@
 # 10 Save output dataset (data_processed.rds)
 ################################################################################
 
-print("diabetes-algo version: v0.0.6")
+print("diabetes-algo version: v0.0.7")
 
 ################################################################################
 # Import libraries and functions
@@ -46,7 +46,7 @@ option_list <- list(
               help = "Ethnicity, in 6 categories, coded as follows: White, Mixed, Asian, Black, Other, Unknown. Guidance (https://pubmed.ncbi.nlm.nih.gov/38987774/) [default %default]",
               metavar = "ethnicity_varname"),
   make_option("--t1dm_date", type = "character", default = "t1dm_date",
-              help = "First type 1 DM diagnosis date, from both primary (e.g. https://www.opencodelists.org/codelist/user/hjforbes/type-1-diabetes/674fbd7a/) and secondary (e.g. https://www.opencodelists.org/codelist/opensafely/type-1-diabetes-secondary-care/2020-09-27/) care [default %default]",
+              help = "First type 1 DM diagnosis date, from both primary (e.g. https://www.opencodelists.org/codelist/user/hjforbes/type-1-diabetes/674fbd7a/) and secondary (e.g. https://www.opencodelists.org/codelist/user/alainamstutz/type-1-diabetes-secondary-care/5eab6d93/) care [default %default]",
               metavar = "YYYY-MM-DD"),
   make_option("--tmp_t1dm_ctv3_date", type = "character", default = "tmp_t1dm_ctv3_date",
               help = "First type 1 DM diagnosis date, from primary care only [default %default]",
@@ -55,7 +55,7 @@ option_list <- list(
               help = "Count of all recorded Type 1 DM diagnosis codes, from both primary and secondary care [default %default]",
               metavar = "t1dm_count_varname"),
   make_option("--t2dm_date", type = "character", default = "t2dm_date",
-              help = "First type 2 DM diagnosis date, from both primary (e.g. https://www.opencodelists.org/codelist/user/hjforbes/type-2-diabetes/3530d710/) and secondary (e.g. https://www.opencodelists.org/codelist/user/r_denholm/type-2-diabetes-secondary-care-bristol/0b7f6cd4/) care [default %default]",
+              help = "First type 2 DM diagnosis date, from both primary (e.g. https://www.opencodelists.org/codelist/user/hjforbes/type-2-diabetes/3530d710/) and secondary (e.g. https://www.opencodelists.org/codelist/user/alainamstutz/type-2-diabetes-secondary-care/77bae0c8/) care [default %default]",
               metavar = "YYYY-MM-DD"),
   make_option("--tmp_t2dm_ctv3_date", type = "character", default = "tmp_t2dm_ctv3_date",
               help = "First type 2 DM diagnosis date, from primary care only [default %default]",

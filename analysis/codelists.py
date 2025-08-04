@@ -16,10 +16,10 @@ ethnicity_codes = codelist_from_csv(
 ## DIABETES
 # T1DM
 diabetes_type1_ctv3 = codelist_from_csv("codelists/user-hjforbes-type-1-diabetes.csv",column="code")
-diabetes_type1_icd10 = codelist_from_csv("codelists/opensafely-type-1-diabetes-secondary-care.csv",column="icd10_code")
+diabetes_type1_icd10 = codelist_from_csv("codelists/user-alainamstutz-type-1-diabetes-secondary-care.csv",column="code")
 # T2DM
 diabetes_type2_ctv3 = codelist_from_csv("codelists/user-hjforbes-type-2-diabetes.csv",column="code")
-diabetes_type2_icd10 = codelist_from_csv("codelists/user-r_denholm-type-2-diabetes-secondary-care-bristol.csv",column="code")
+diabetes_type2_icd10 = codelist_from_csv("codelists/user-alainamstutz-type-2-diabetes-secondary-care.csv",column="code")
 # Other or non-specific diabetes
 diabetes_other_ctv3 = codelist_from_csv("codelists/user-hjforbes-other-or-nonspecific-diabetes.csv",column="code")
 # Gestational diabetes

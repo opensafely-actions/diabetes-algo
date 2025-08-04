@@ -1,3 +1,8 @@
+# [v0.0.7](https://github.com/opensafely-actions/diabetes-algo/releases/tag/v0.0.7)
+
+* Updated CHANGELOG
+* Updated T1DM and T2DM secondary care codelists (ICD10) to include not only parent code but all child codes, too. To be on the safe side.
+
 # [v0.0.6](https://github.com/opensafely-actions/diabetes-algo/releases/tag/v0.0.6)
 
 * Updated CHANGELOG

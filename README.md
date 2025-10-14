@@ -15,15 +15,17 @@ The action:
   - Gestational, Type 2, Type 1, Other, Unlikely (variable
     ‘cat\_diabetes’: GDM, T2DM, T1DM, DM\_other, DM\_unlikely)
   - Besides the categorical type variable, it provides the diagnosis
-    date for each type as follows:
+    date for each type. The default is:
   - gestationaldm\_date: First date from GDM clinical codes
-  - t2dm\_date: First date from T1DM clinical, T2DM clinical, and
-    diabetes medication codes
-  - t1dm\_date: First date from T1DM clinical, T2DM clinical, and
-    diabetes medication (without T2DM-specific medication) codes
-  - otherdm\_date: First date from T1DM clinical, T2DM clinical,
-    diabetes medication, diabetes-specific process, and
-    diabetes-unspecific clinical codes
+  - t2dm\_date: First date from T1DM clinical codes, T2DM clinical
+    codes, unspecific diabetes clinical codes, and diabetes medication
+    codes
+  - t1dm\_date: First date from T1DM clinical codes, T2DM clinical
+    codes, unspecific diabetes clinical codes, and diabetes medication
+    codes
+  - otherdm\_date: First date from T1DM clinical codes, T2DM clinical
+    codes, unspecific diabetes clinical codes, diabetes medication
+    codes, and diabetes-specific procedure codes
 
 ## Usage
 

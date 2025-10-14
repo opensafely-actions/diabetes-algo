@@ -14,11 +14,11 @@ The action:
 - Loads and double-checks 21 input variables
 - Runs the diabetes adjudication algorithm (Figure 1 below) to define the following Diabetes types: 
 -   Gestational, Type 2, Type 1, Other, Unlikely (variable 'cat_diabetes': GDM, T2DM, T1DM, DM_other, DM_unlikely)
-- Besides the categorical type variable, it provides the diagnosis date for each type as follows:
+- Besides the categorical type variable, it provides the diagnosis date for each type. The default is:
 -   gestationaldm_date: First date from GDM clinical codes
--   t2dm_date: First date from T1DM clinical, T2DM clinical, and diabetes medication codes
--   t1dm_date: First date from T1DM clinical, T2DM clinical, and diabetes medication (without T2DM-specific medication) codes
--   otherdm_date: First date from T1DM clinical, T2DM clinical, diabetes medication, diabetes-specific process, and diabetes-unspecific clinical codes
+-   t2dm_date: First date from T1DM clinical codes, T2DM clinical codes, unspecific diabetes clinical codes, and diabetes medication codes
+-   t1dm_date: First date from T1DM clinical codes, T2DM clinical codes, unspecific diabetes clinical codes, and diabetes medication codes
+-   otherdm_date: First date from T1DM clinical codes, T2DM clinical codes, unspecific diabetes clinical codes, diabetes medication codes, and diabetes-specific procedure codes
 
 ## Usage
 

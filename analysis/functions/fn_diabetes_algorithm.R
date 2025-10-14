@@ -173,7 +173,7 @@ fn_diabetes_algorithm <- function(data, column_mapping) {
         TRUE ~ NA_character_
       )
     ) %>%
-    mutate(across(cat_diabetes, ~replace_na(., "DM unlikely"))) %>%
+    mutate(across(cat_diabetes, ~replace_na(., "DM_unlikely"))) %>%
 
 
     ## --- Final Clean-Up ---
@@ -181,18 +181,18 @@ fn_diabetes_algorithm <- function(data, column_mapping) {
     # Uses diabetes category from algorithm above and date of first diabetes related code
 
     # remove original diabetes variables to avoid duplication
-    dplyr::select(- t1dm_date, - t2dm_date, - otherdm_date, - gestationaldm_date) %>%
+    # dplyr::select(- t1dm_date, - t2dm_date, - otherdm_date, - gestationaldm_date) %>%
            # GESTATIONAL
-    mutate(gestationaldm_date = as_date(case_when(cat_diabetes == "GDM" ~ tmp_first_diabetes_diag_date,
+    mutate(gestationaldm_date = as_date(case_when(cat_diabetes == "GDM" ~ gestationaldm_date,
                                                   TRUE ~ as.Date(NA))),
            # T2DM
-           t2dm_date = as_date(case_when(cat_diabetes == "T2DM" ~ tmp_first_diabetes_diag_date,
+           t2dm_date = as_date(case_when(cat_diabetes == "T2DM" ~ pmin(t2dm_date, t1dm_date, otherdm_date, tmp_diabetes_medication_date, tmp_nonmetform_drugs_dmd_date, na.rm = TRUE),
                                          TRUE ~ as.Date(NA))),
            # T1DM
-           t1dm_date = as_date(case_when(cat_diabetes == "T1DM" ~ tmp_first_diabetes_diag_date,
+           t1dm_date = as_date(case_when(cat_diabetes == "T1DM" ~ pmin(t2dm_date, t1dm_date, otherdm_date, tmp_diabetes_medication_date, na.rm = TRUE),
                                          TRUE ~ as.Date(NA))),
            # OTHER
-           otherdm_date = as_date(case_when(cat_diabetes == "DM_other" ~ pmin(tmp_hba1c_date_step7, tmp_over5_pocc_step7, na.rm = TRUE),
+           otherdm_date = as_date(case_when(cat_diabetes == "DM_other" ~ pmin(t2dm_date, t1dm_date, otherdm_date, tmp_diabetes_medication_date, tmp_nonmetform_drugs_dmd_date, tmp_hba1c_date_step7, tmp_over5_pocc_step7, na.rm = TRUE),
                                             TRUE ~ as.Date(NA)))
            )
 

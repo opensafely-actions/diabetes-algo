@@ -12,7 +12,7 @@
 # 10 Save output dataset (data_processed.rds)
 ################################################################################
 
-print("diabetes-algo version: v0.0.7")
+print("diabetes-algo version: v0.0.9")
 
 ################################################################################
 # Import libraries and functions
@@ -91,7 +91,7 @@ option_list <- list(
               help = "First antidiabetic drug (any, except insulin) date, from primary care (e.g. https://www.opencodelists.org/codelist/opensafely/antidiabetic-drugs/2020-07-16/) only [default %default]",
               metavar = "YYYY-MM-DD"),
   make_option("--tmp_nonmetform_drugs_dmd_date", type = "character", default = "tmp_nonmetform_drugs_dmd_date",
-              help = "First antidiabetic drug (any, except insulin and metformin) date, from primary care (e.g. https://www.opencodelists.org/codelist/user/r_denholm/non-metformin-antidiabetic-drugs_bristol/7207eb58/) only [default %default]",
+              help = "First antidiabetic drug (any, except insulin and metformin) date, from primary care (e.g. https://www.opencodelists.org/codelist/user/alainamstutz/non-metformin-oral-antidiabetic/0641be78/) only [default %default]",
               metavar = "YYYY-MM-DD"),
   make_option("--tmp_diabetes_medication_date", type = "character", default = "tmp_diabetes_medication_date",
               help = "First antidiabetic drug date, i.e. minimum of tmp_insulin_dmd_date and tmp_antidiabetic_drugs_dmd_date [default %default]",

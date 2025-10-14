@@ -1,8 +1,8 @@
 # [v0.0.9](https://github.com/opensafely-actions/diabetes-algo/releases/tag/v0.0.9)
 
 * Updated CHANGELOG
-* Updated non-metformin antidiabetic codelist
-* Changed the rules for assigning the baseline=diagnosis date to each diabetes type, see README
+* Updated the non-metformin antidiabetic codelist
+* Changed the logic regarding the diagnosis date, specific to each diabetes type. This change entails the DEFAULT logic, see README
 
 # [v0.0.8](https://github.com/opensafely-actions/diabetes-algo/releases/tag/v0.0.8)
 

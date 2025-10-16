@@ -12,6 +12,6 @@ user/hjforbes/nondiagnostic-diabetes-codes/50f30a3b
 
 opensafely/insulin-medication/2020-04-26
 opensafely/antidiabetic-drugs/2020-07-16
-user/r_denholm/non-metformin-antidiabetic-drugs_bristol/7207eb58
+user/alainamstutz/non-metformin-oral-antidiabetic/0641be78
 
 opensafely/glycated-haemoglobin-hba1c-tests-numerical-value/5134e926

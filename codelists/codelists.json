@@ -66,11 +66,11 @@
       "downloaded_at": "2024-12-09 16:25:15.790595Z",
       "sha": "821d163d926e12fc6bd07fc78187f2756e1c221f"
     },
-    "user-r_denholm-non-metformin-antidiabetic-drugs_bristol.csv": {
-      "id": "user/r_denholm/non-metformin-antidiabetic-drugs_bristol/7207eb58",
-      "url": "https://www.opencodelists.org/codelist/user/r_denholm/non-metformin-antidiabetic-drugs_bristol/7207eb58/",
-      "downloaded_at": "2024-12-09 16:25:15.986970Z",
-      "sha": "1ac45646e6612579a38b3eff64524c72d150c6f1"
+    "user-alainamstutz-non-metformin-oral-antidiabetic.csv": {
+      "id": "user/alainamstutz/non-metformin-oral-antidiabetic/0641be78",
+      "url": "https://www.opencodelists.org/codelist/user/alainamstutz/non-metformin-oral-antidiabetic/0641be78/",
+      "downloaded_at": "2025-10-14 12:18:32.585247Z",
+      "sha": "ac5144461afda949328bc75af177a4e47292ef20"
     },
     "opensafely-glycated-haemoglobin-hba1c-tests-numerical-value.csv": {
       "id": "opensafely/glycated-haemoglobin-hba1c-tests-numerical-value/5134e926",

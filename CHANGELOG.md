@@ -1,3 +1,14 @@
+# [v0.0.9](https://github.com/opensafely-actions/diabetes-algo/releases/tag/v0.0.9)
+
+* Updated CHANGELOG
+* Updated the non-metformin antidiabetic codelist
+* Changed the logic regarding the diagnosis date, specific to each diabetes type. This change entails the DEFAULT logic, see README
+
+# [v0.0.8](https://github.com/opensafely-actions/diabetes-algo/releases/tag/v0.0.8)
+
+* Updated CHANGELOG
+* Updated ubuntu package checkout@v4 to checkout@v5
+
 # [v0.0.7](https://github.com/opensafely-actions/diabetes-algo/releases/tag/v0.0.7)
 
 * Updated CHANGELOG

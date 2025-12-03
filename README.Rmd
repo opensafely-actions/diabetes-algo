@@ -14,16 +14,18 @@ The action:
 - Loads and double-checks 21 input variables
 - Runs the diabetes adjudication algorithm (Figure 1 below) to define the following Diabetes types: 
 -   Gestational, Type 2, Type 1, Other, Unlikely (variable 'cat_diabetes': GDM, T2DM, T1DM, DM_other, DM_unlikely)
-- Besides the categorical type variable, it provides the diagnosis date for each type. The default is:
+- Besides the categorical type variable, it provides the diagnosis date for each type. The default choice of diagnosis date sources for each type is:
 -   gestationaldm_date: First date from GDM clinical codes
 -   t2dm_date: First date from T1DM clinical codes, T2DM clinical codes, unspecific diabetes clinical codes, and diabetes medication codes
 -   t1dm_date: First date from T1DM clinical codes, T2DM clinical codes, unspecific diabetes clinical codes, and diabetes medication codes
 -   otherdm_date: First date from T1DM clinical codes, T2DM clinical codes, unspecific diabetes clinical codes, diabetes medication codes, and diabetes-specific procedure codes
+- Version 0.0.10 allows users to change the above-mentioned default choice of diagnosis date sources and define their own sources, see args gestationaldm_date_sources, t1dm_date_sources, t2dm_date_sources, otherdm_date_sources
 
 ## Usage
 
 The input variables/arguments/options to the action are specified using the flags style (i.e., `--argname=argvalue`).
 Below, you find a detailed description of each input variable including examples for codelists to use when defining these variables in the OpenSAFELY dataset definition.
+IMPORTANT: The used codelists here are just examples. Users have to double-check these. Important is to adhere to the specified source (primary or secondary care) where these codelists should come from.
 Copy-paste the argument names into your yaml and map them to your input variable names.
 An example of a dataset definition that defines each 21 input variables, find [here](https://github.com/alainamstutz/diabetes-algo/blob/main/analysis/dataset_definition.py). 
 ```{r, include=FALSE}
@@ -48,7 +50,7 @@ source_lines <- function(file, lines) {
 }
 # Note: in the following command the last line should be the line that
 # creates the opt_parser object using OptionParser(...)
-source_lines("analysis/data_process.R", 34:110)
+source_lines("analysis/data_process.R", 34:122)
 optparse::print_help(opt_parser)
 ```
 
@@ -75,7 +77,7 @@ diabetes_algo:
   run: >
     diabetes-algo:[version]
       --birth_date=your_dob_date_variable
-      --tmp_t1dm_ctv3_date=your_t2dm_from_primcare_date_variable
+      --tmp_t1dm_primarycare_date=your_t2dm_from_primcare_date_variable
       --tmp_max_hba1c_mmol_mol_num=your_max_hba1c_num_variable
       --## more arguments
       --df_output=data_processed.csv.gz #or data_processed.rds
@@ -101,7 +103,7 @@ diabetes_algo_via_config:
   config:
       df_input: input.arrow
       birth_date: your_dob_date_variable
-      tmp_t1dm_ctv3_date: your_t2dm_from_primcare_date_variable
+      tmp_t1dm_primarycare_date: your_t2dm_from_primcare_date_variable
       ## more arguments
       df_output: data_processed.csv.gz #or data_processed.rds
   needs:

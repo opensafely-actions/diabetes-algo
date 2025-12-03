@@ -12,7 +12,7 @@
 # 10 Save output dataset (data_processed.rds)
 ################################################################################
 
-print("diabetes-algo version: v0.0.9")
+print("diabetes-algo version: v0.0.10")
 
 ################################################################################
 # Import libraries and functions
@@ -37,18 +37,18 @@ option_list <- list(
               help = "Input dataset. csv, csv.gz, rds, arrow, or a feather file. Assumed to be within the directory 'output' [default %default]",
               metavar = "filename.csv"),
   make_option("--remove_helper", type = "logical", default = TRUE,
-              help = "Logical, indicating whether all helper variables (_tmp and step_) are removed [default %default]",
+              help = "Logical, indicating whether all helper variables (tmp_ and step_) are removed [default %default]",
               metavar = "TRUE/FALSE"),
   make_option("--birth_date", type = "character", default = "birth_date",
               help = "Birth date [default %default]",
               metavar = "YYYY-MM-DD"),
   make_option("--ethnicity_cat", type = "character", default = "ethnicity_cat",
-              help = "Ethnicity, in 6 categories, coded as follows: White, Mixed, Asian, Black, Other, Unknown. Guidance (https://pubmed.ncbi.nlm.nih.gov/38987774/) [default %default]",
+              help = "Ethnicity, in 6 categories, coded as follows: White, Mixed, Asian, Black, Other, Unknown. Guidance: https://pubmed.ncbi.nlm.nih.gov/38987774/ [default %default]",
               metavar = "ethnicity_varname"),
   make_option("--t1dm_date", type = "character", default = "t1dm_date",
               help = "First type 1 DM diagnosis date, from both primary (e.g. https://www.opencodelists.org/codelist/user/hjforbes/type-1-diabetes/674fbd7a/) and secondary (e.g. https://www.opencodelists.org/codelist/user/alainamstutz/type-1-diabetes-secondary-care/5eab6d93/) care [default %default]",
               metavar = "YYYY-MM-DD"),
-  make_option("--tmp_t1dm_ctv3_date", type = "character", default = "tmp_t1dm_ctv3_date",
+  make_option("--tmp_t1dm_primarycare_date", type = "character", default = "tmp_t1dm_primarycare_date",
               help = "First type 1 DM diagnosis date, from primary care only [default %default]",
               metavar = "YYYY-MM-DD"),
   make_option("--tmp_t1dm_count_num", type = "character", default = "tmp_t1dm_count_num",
@@ -57,7 +57,7 @@ option_list <- list(
   make_option("--t2dm_date", type = "character", default = "t2dm_date",
               help = "First type 2 DM diagnosis date, from both primary (e.g. https://www.opencodelists.org/codelist/user/hjforbes/type-2-diabetes/3530d710/) and secondary (e.g. https://www.opencodelists.org/codelist/user/alainamstutz/type-2-diabetes-secondary-care/77bae0c8/) care [default %default]",
               metavar = "YYYY-MM-DD"),
-  make_option("--tmp_t2dm_ctv3_date", type = "character", default = "tmp_t2dm_ctv3_date",
+  make_option("--tmp_t2dm_primarycare_date", type = "character", default = "tmp_t2dm_primarycare_date",
               help = "First type 2 DM diagnosis date, from primary care only [default %default]",
               metavar = "YYYY-MM-DD"),
   make_option("--tmp_t2dm_count_num", type = "character", default = "tmp_t2dm_count_num",
@@ -75,11 +75,11 @@ option_list <- list(
   make_option("--tmp_poccdm_date", type = "character", default = "tmp_poccdm_date",
               help = "First Non-diagnostic DM code date, from primary care (e.g. https://www.opencodelists.org/codelist/user/hjforbes/nondiagnostic-diabetes-codes/50f30a3b/) only [default %default]",
               metavar = "YYYY-MM-DD"),
-  make_option("--tmp_poccdm_ctv3_count_num", type = "character", default = "tmp_poccdm_ctv3_count_num",
+  make_option("--tmp_poccdm_primarycare_count_num", type = "character", default = "tmp_poccdm_primarycare_count_num",
               help = "Count of all recorded Non-diagnostic DM codes, from primary care only [default %default]",
               metavar = "non_diag_dm_code_count_varname"),
   make_option("--tmp_max_hba1c_mmol_mol_num", type = "character", default = "tmp_max_hba1c_mmol_mol_num",
-              help = "Maximum HbA1c value recorded in query period, in mmol/mol (use https://www.opencodelists.org/codelist/opensafely/glycated-haemoglobin-hba1c-tests-numerical-value/5134e926/) from primary care only [default %default]",
+              help = "Maximum HbA1c value recorded in query period, in mmol/mol (e.g. https://www.opencodelists.org/codelist/opensafely/glycated-haemoglobin-hba1c-tests-numerical-value/5134e926/) from primary care only [default %default]",
               metavar = "max_hba1c_varname"),
   make_option("--tmp_max_hba1c_date", type = "character", default = "tmp_max_hba1c_date",
               help = "First maximum HbA1c value date, from primary care only [default %default]",
@@ -99,6 +99,18 @@ option_list <- list(
   make_option("--tmp_first_diabetes_diag_date", type = "character", default = "tmp_first_diabetes_diag_date",
               help = "First diabetes diagnosis date variable, i.e. minimum of t1dm_date, t2dm_date, otherdm_date, gestationaldm_date, tmp_poccdm_date, tmp_nonmetform_drugs_dmd_date, and tmp_diabetes_medication_date [default %default]",
               metavar = "YYYY-MM-DD"),
+  make_option("--gestationaldm_date_sources", type = "character", default = "gestationaldm_date",
+              help = "Choose which dates are the source to define the baseline date for Gestational DM (minimum of these). Options: t2dm_date, t1dm_date, gestationaldm_date, otherdm_date, tmp_diabetes_medication_date, tmp_max_hba1c_date (If >= 47.5 mmol/mol, see step 7), tmp_poccdm_date (If > 5 process codes, see step 7) [default %default]",
+              metavar = "diagnosis_date_sources"),
+  make_option("--t1dm_date_sources", type = "character", default = "t2dm_date,t1dm_date,otherdm_date,tmp_diabetes_medication_date",
+              help = "Choose which dates are the source to define the baseline date for Type 1 DM (minimum of these). Options: t2dm_date, t1dm_date, gestationaldm_date, otherdm_date, tmp_diabetes_medication_date, tmp_max_hba1c_date (If >= 47.5 mmol/mol, see step 7), tmp_poccdm_date (If > 5 process codes, see step 7) [default %default]",
+              metavar = "diagnosis_date_sources"),
+  make_option("--t2dm_date_sources", type = "character", default = "t2dm_date,t1dm_date,otherdm_date,tmp_diabetes_medication_date",
+              help = "Choose which dates are the source to define the baseline date for Type 2 DM (minimum of these). Options: t2dm_date, t1dm_date, gestationaldm_date, otherdm_date, tmp_diabetes_medication_date, tmp_max_hba1c_date (If >= 47.5 mmol/mol, see step 7), tmp_poccdm_date (If > 5 process codes, see step 7) [default %default]",
+              metavar = "diagnosis_date_sources"),
+  make_option("--otherdm_date_sources", type = "character", default = "t2dm_date,t1dm_date,otherdm_date,tmp_diabetes_medication_date,tmp_max_hba1c_date,tmp_poccdm_date",
+              help = "Choose which dates are the source to define the baseline date for Other DM (minimum of these). Options: t2dm_date, t1dm_date, gestationaldm_date, otherdm_date, tmp_diabetes_medication_date, tmp_max_hba1c_date (If >= 47.5 mmol/mol, see step 7), tmp_poccdm_date (If > 5 process codes, see step 7) [default %default]",
+              metavar = "diagnosis_date_sources"),
   make_option("--df_output", type = "character", default = "data_processed.csv.gz",
               help = "Output dataset. csv.gz or rds file. This is assumed to be added to the directory 'output' [default %default]",
               metavar = "filename.csv.gz"),
@@ -148,17 +160,17 @@ print("Map user variable names")
 column_mapping <- list(
   birth_date = opt$birth_date,
   ethnicity_cat = opt$ethnicity_cat,
-  tmp_t1dm_ctv3_date = opt$tmp_t1dm_ctv3_date,
+  tmp_t1dm_primarycare_date = opt$tmp_t1dm_primarycare_date,
   t1dm_date = opt$t1dm_date,
   tmp_t1dm_count_num = opt$tmp_t1dm_count_num,
-  tmp_t2dm_ctv3_date = opt$tmp_t2dm_ctv3_date,
+  tmp_t2dm_primarycare_date = opt$tmp_t2dm_primarycare_date,
   t2dm_date = opt$t2dm_date,
   tmp_t2dm_count_num = opt$tmp_t2dm_count_num,
   otherdm_date = opt$otherdm_date,
   tmp_otherdm_count_num = opt$tmp_otherdm_count_num,
   gestationaldm_date = opt$gestationaldm_date,
   tmp_poccdm_date = opt$tmp_poccdm_date,
-  tmp_poccdm_ctv3_count_num = opt$tmp_poccdm_ctv3_count_num,
+  tmp_poccdm_primarycare_count_num = opt$tmp_poccdm_primarycare_count_num,
   tmp_max_hba1c_mmol_mol_num = opt$tmp_max_hba1c_mmol_mol_num,
   tmp_max_hba1c_date = opt$tmp_max_hba1c_date,
   tmp_insulin_dmd_date = opt$tmp_insulin_dmd_date,
@@ -177,6 +189,16 @@ if (length(missing_columns) > 0) {
 
 print("Extract core data and patient_id")
 core <- data[c("patient_id", unlist(column_mapping))]
+
+################################################################################
+# Parse the diagnosis date source input string
+################################################################################
+diagnosis_date_sources <- list(
+  gestationaldm = strsplit(opt$gestationaldm_date_sources, ",")[[1]],
+  t1dm = strsplit(opt$t1dm_date_sources, ",")[[1]],
+  t2dm = strsplit(opt$t2dm_date_sources, ",")[[1]],
+  otherdm = strsplit(opt$otherdm_date_sources, ",")[[1]]
+)
 
 ################################################################################
 # Double-check the imported core variables
@@ -245,8 +267,8 @@ core <- core %>%
 ################################################################################
 # Apply the diabetes algorithm
 ################################################################################
-print("Apply the diabetes algorithm and delete all tmp & step variables")
-core <- fn_diabetes_algorithm(core, column_mapping)
+print("Apply the diabetes algorithm")
+core <- fn_diabetes_algorithm(core, column_mapping, diagnosis_date_sources)
 
 ################################################################################
 # Merge the core back to the user data

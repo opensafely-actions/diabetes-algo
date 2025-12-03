@@ -41,6 +41,11 @@ actions:
     run: r:v2 analysis/data_process.R
     config:
       df_input: input.arrow
+      remove_helper: FALSE
+      gestationaldm_date_sources: gestationaldm_date
+      t1dm_date_sources: t2dm_date,t1dm_date,otherdm_date,gestationaldm_date,tmp_diabetes_medication_date,tmp_max_hba1c_date,tmp_poccdm_date
+      t2dm_date_sources: t2dm_date,t1dm_date,otherdm_date,gestationaldm_date,tmp_diabetes_medication_date,tmp_max_hba1c_date,tmp_poccdm_date
+      otherdm_date_sources: t2dm_date,t1dm_date,otherdm_date,gestationaldm_date,tmp_diabetes_medication_date,tmp_max_hba1c_date,tmp_poccdm_date
       df_output: data_processed_3.csv.gz
     needs:
     - generate_dataset_3

@@ -1,19 +1,41 @@
-fn_diabetes_algorithm <- function(data, column_mapping) {
+fn_diabetes_algorithm <- function(data, column_mapping, diagnosis_date_sources = NULL) {
+
+  # Set default date sources if not provided
+  if (is.null(diagnosis_date_sources)) {
+    diagnosis_date_sources <- list(
+      gestationaldm = c("gestationaldm_date"),
+      t1dm = c("t2dm_date", "t1dm_date", "otherdm_date", "tmp_diabetes_medication_date"),
+      t2dm = c("t2dm_date", "t1dm_date", "otherdm_date", "tmp_diabetes_medication_date"),
+      otherdm = c("t2dm_date", "t1dm_date", "otherdm_date", "tmp_diabetes_medication_date",
+                  "tmp_max_hba1c_date", "tmp_poccdm_date")
+    )
+  }
+
+  # Validate date sources
+  valid_sources <- c("t2dm_date", "t1dm_date", "otherdm_date", "gestationaldm_date",
+                     "tmp_diabetes_medication_date", "tmp_max_hba1c_date", "tmp_poccdm_date")
+  for (dm_type in c("gestationaldm", "t1dm", "t2dm", "otherdm")) {
+    invalid <- setdiff(diagnosis_date_sources[[dm_type]], valid_sources)
+    if (length(invalid) > 0) {
+      stop(paste0("Invalid date sources for ", dm_type, ": ", paste(invalid, collapse = ", ")))
+    }
+  }
+
   data <- data %>%
     rename(
       birth_date = all_of(column_mapping$birth_date),
       ethnicity_cat = all_of(column_mapping$ethnicity_cat),
-      tmp_t1dm_ctv3_date = all_of(column_mapping$tmp_t1dm_ctv3_date),
+      tmp_t1dm_primarycare_date = all_of(column_mapping$tmp_t1dm_primarycare_date),
       t1dm_date = all_of(column_mapping$t1dm_date),
       tmp_t1dm_count_num = all_of(column_mapping$tmp_t1dm_count_num),
-      tmp_t2dm_ctv3_date = all_of(column_mapping$tmp_t2dm_ctv3_date),
+      tmp_t2dm_primarycare_date = all_of(column_mapping$tmp_t2dm_primarycare_date),
       t2dm_date = all_of(column_mapping$t2dm_date),
       tmp_t2dm_count_num = all_of(column_mapping$tmp_t2dm_count_num),
       otherdm_date = all_of(column_mapping$otherdm_date),
       tmp_otherdm_count_num = all_of(column_mapping$tmp_otherdm_count_num),
       gestationaldm_date = all_of(column_mapping$gestationaldm_date),
       tmp_poccdm_date = all_of(column_mapping$tmp_poccdm_date),
-      tmp_poccdm_ctv3_count_num = all_of(column_mapping$tmp_poccdm_ctv3_count_num),
+      tmp_poccdm_primarycare_count_num = all_of(column_mapping$tmp_poccdm_primarycare_count_num),
       tmp_max_hba1c_mmol_mol_num = all_of(column_mapping$tmp_max_hba1c_mmol_mol_num),
       tmp_max_hba1c_date = all_of(column_mapping$tmp_max_hba1c_date),
       tmp_insulin_dmd_date = all_of(column_mapping$tmp_insulin_dmd_date),
@@ -36,7 +58,7 @@ fn_diabetes_algorithm <- function(data, column_mapping) {
                                                TRUE ~ "No"), # prevents any NA: Those with DM but not fulfilling the condition OR those without DM at all -> "No"
       tmp_hba1c_date_step7 = case_when(!is.na(tmp_max_hba1c_mmol_mol_num) & tmp_max_hba1c_mmol_mol_num >= 47.5 ~ tmp_max_hba1c_date,
                                        TRUE ~ as.Date(NA)),
-      tmp_over5_pocc_step7 = case_when(!is.na(tmp_poccdm_ctv3_count_num) & tmp_poccdm_ctv3_count_num >= 5 ~ tmp_poccdm_date,
+      tmp_over5_pocc_step7 = case_when(!is.na(tmp_poccdm_primarycare_count_num) & tmp_poccdm_primarycare_count_num >= 5 ~ tmp_poccdm_date,
                                        TRUE ~ as.Date(NA))) %>%
 
     ## --- Step 1: Any gestational diabetes code?
@@ -81,13 +103,13 @@ fn_diabetes_algorithm <- function(data, column_mapping) {
            ) %>%
 
     ## --- Step 6a. In primary care, only type 1 DM diagnostic codes reported? Denominator: Step 6 == Yes
-    mutate(step_6a = case_when(step_6 == "Yes" & !is.na(tmp_t1dm_ctv3_date) & is.na(tmp_t2dm_ctv3_date) ~ "Yes",
+    mutate(step_6a = case_when(step_6 == "Yes" & !is.na(tmp_t1dm_primarycare_date) & is.na(tmp_t2dm_primarycare_date) ~ "Yes",
                                step_6 == "Yes" ~ "No",
                                TRUE ~ NA_character_) # NA will only be fulfilled if not part of denominator
            ) %>%
 
     ## --- Step 6b. In primary care, only type 2 DM diagnostic codes reported? Denominator: Step 6a == No
-    mutate(step_6b = case_when(step_6a == "No" & is.na(tmp_t1dm_ctv3_date) & !is.na(tmp_t2dm_ctv3_date) ~ "Yes",
+    mutate(step_6b = case_when(step_6a == "No" & is.na(tmp_t1dm_primarycare_date) & !is.na(tmp_t2dm_primarycare_date) ~ "Yes",
                                step_6a == "No" ~ "No",
                                TRUE ~ NA_character_) # NA will only be fulfilled if not part of denominator
            ) %>%
@@ -114,7 +136,7 @@ fn_diabetes_algorithm <- function(data, column_mapping) {
     mutate(step_7 = case_when(step_6 == "No" # this includes only people with both missing t1dm_date & t2dm_date (otherwise fished out further above)
                               & ((!is.na(tmp_diabetes_medication_date)) |
                                    (tmp_max_hba1c_mmol_mol_num >= 47.5) |
-                                   (tmp_poccdm_ctv3_count_num >= 5)) ~ "Yes", # any other valid evidence for a diabetes, i.e. "unspecified Diabetes"?
+                                   (tmp_poccdm_primarycare_count_num >= 5)) ~ "Yes", # any other valid evidence for a diabetes, i.e. "unspecified Diabetes"?
                               step_6 == "No" ~ "No", # => Diabetes unlikely
                               TRUE ~ NA_character_) # NA will only be fulfilled if not part of denominator.
     ) %>%
@@ -177,21 +199,69 @@ fn_diabetes_algorithm <- function(data, column_mapping) {
 
 
     ## --- Assignment of the diagnosis date ---
-    # Define the incident diabetes date variables ("diagnosis date") for each diabetes type category
+    # Define the incident diabetes date variables ("diagnosis date") for each diabetes type category (user-customizable)
 
-           # GESTATIONAL
-    mutate(gestationaldm_date = as_date(case_when(cat_diabetes == "GDM" ~ gestationaldm_date,
-                                                  TRUE ~ as.Date(NA))),
-           # T2DM
-           t2dm_date = as_date(case_when(cat_diabetes == "T2DM" ~ pmin(t2dm_date, t1dm_date, otherdm_date, tmp_diabetes_medication_date, na.rm = TRUE),
-                                         TRUE ~ as.Date(NA))),
-           # T1DM
-           t1dm_date = as_date(case_when(cat_diabetes == "T1DM" ~ pmin(t2dm_date, t1dm_date, otherdm_date, tmp_diabetes_medication_date, na.rm = TRUE),
-                                         TRUE ~ as.Date(NA))),
-           # OTHER
-           otherdm_date = as_date(case_when(cat_diabetes == "DM_other" ~ pmin(t2dm_date, t1dm_date, otherdm_date, tmp_diabetes_medication_date, tmp_hba1c_date_step7, tmp_over5_pocc_step7, na.rm = TRUE),
-                                            TRUE ~ as.Date(NA)))
-           )
+    {
+      # Helper function to calculate minimum date from user-specified sources
+      calc_min_date <- function(dm_type, data_cols) {
+        sources <- diagnosis_date_sources[[dm_type]]
+        date_cols <- intersect(sources, names(data_cols))
+        if (length(date_cols) == 0) {
+          return(as.Date(NA))
+        }
+        do.call(pmin, c(data_cols[date_cols], na.rm = TRUE))
+      }
+
+      mutate(.,
+             # GDM (user-customizable)
+             gestationaldm_date = as_date(case_when(
+               cat_diabetes == "GDM" ~ calc_min_date("gestationaldm",
+                                                     list(t2dm_date = t2dm_date,
+                                                          t1dm_date = t1dm_date,
+                                                          gestationaldm_date = gestationaldm_date,
+                                                          otherdm_date = otherdm_date,
+                                                          tmp_diabetes_medication_date = tmp_diabetes_medication_date,
+                                                          tmp_max_hba1c_date = tmp_hba1c_date_step7, # takes the user input date variable, but is slightly modified above
+                                                          tmp_poccdm_date = tmp_over5_pocc_step7)), # takes the user input date variable, but is slightly modified above
+               TRUE ~ as.Date(NA))),
+
+             # T2DM (user-customizable)
+             t2dm_date = as_date(case_when(
+               cat_diabetes == "T2DM" ~ calc_min_date("t2dm",
+                                                      list(t2dm_date = t2dm_date,
+                                                           t1dm_date = t1dm_date,
+                                                           gestationaldm_date = gestationaldm_date,
+                                                           otherdm_date = otherdm_date,
+                                                           tmp_diabetes_medication_date = tmp_diabetes_medication_date,
+                                                           tmp_max_hba1c_date = tmp_hba1c_date_step7,
+                                                           tmp_poccdm_date = tmp_over5_pocc_step7)),
+               TRUE ~ as.Date(NA))),
+
+             # T1DM (user-customizable)
+             t1dm_date = as_date(case_when(
+               cat_diabetes == "T1DM" ~ calc_min_date("t1dm",
+                                                      list(t2dm_date = t2dm_date,
+                                                           t1dm_date = t1dm_date,
+                                                           gestationaldm_date = gestationaldm_date,
+                                                           otherdm_date = otherdm_date,
+                                                           tmp_diabetes_medication_date = tmp_diabetes_medication_date,
+                                                           tmp_max_hba1c_date = tmp_hba1c_date_step7,
+                                                           tmp_poccdm_date = tmp_over5_pocc_step7)),
+               TRUE ~ as.Date(NA))),
+
+             # OTHER (user-customizable)
+             otherdm_date = as_date(case_when(
+               cat_diabetes == "DM_other" ~ calc_min_date("otherdm",
+                                                          list(t2dm_date = t2dm_date,
+                                                               t1dm_date = t1dm_date,
+                                                               gestationaldm_date = gestationaldm_date,
+                                                               otherdm_date = otherdm_date,
+                                                               tmp_diabetes_medication_date = tmp_diabetes_medication_date,
+                                                               tmp_max_hba1c_date = tmp_hba1c_date_step7,
+                                                               tmp_poccdm_date = tmp_over5_pocc_step7)),
+               TRUE ~ as.Date(NA)))
+      )
+    }
 
   return(data)
 }

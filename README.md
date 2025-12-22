@@ -15,7 +15,8 @@ The action:
   - Gestational, Type 2, Type 1, Other, Unlikely (variable
     ‘cat\_diabetes’: GDM, T2DM, T1DM, DM\_other, DM\_unlikely)
   - Besides the categorical type variable, it provides the diagnosis
-    date for each type. The default is:
+    date for each type. The default choice of diagnosis date sources for
+    each type is:
   - gestationaldm\_date: First date from GDM clinical codes
   - t2dm\_date: First date from T1DM clinical codes, T2DM clinical
     codes, unspecific diabetes clinical codes, and diabetes medication
@@ -26,6 +27,10 @@ The action:
   - otherdm\_date: First date from T1DM clinical codes, T2DM clinical
     codes, unspecific diabetes clinical codes, diabetes medication
     codes, and diabetes-specific procedure codes
+  - Version 0.0.10 allows users to change the above-mentioned default
+    choice of diagnosis date sources and define their own sources, see
+    args gestationaldm\_date\_sources, t1dm\_date\_sources,
+    t2dm\_date\_sources, otherdm\_date\_sources
 
 ## Usage
 
@@ -33,6 +38,9 @@ The input variables/arguments/options to the action are specified using
 the flags style (i.e., `--argname=argvalue`). Below, you find a detailed
 description of each input variable including examples for codelists to
 use when defining these variables in the OpenSAFELY dataset definition.
+IMPORTANT: The used codelists here are just examples. Users have to
+double-check these. Important is to adhere to the specified source
+(primary or secondary care) where these codelists should come from.
 Copy-paste the argument names into your yaml and map them to your input
 variable names. An example of a dataset definition that defines each 21
 input variables, find
@@ -47,7 +55,7 @@ input variables, find
     the directory 'output' [default input.csv]
     
     --remove_helper=TRUE/FALSE
-    Logical, indicating whether all helper variables (_tmp and step_) are removed
+    Logical, indicating whether all helper variables (tmp_ and step_) are removed
     [default TRUE]
     
     --birth_date=YYYY-MM-DD
@@ -55,7 +63,7 @@ input variables, find
     
     --ethnicity_cat=ETHNICITY_VARNAME
     Ethnicity, in 6 categories, coded as follows: White, Mixed, Asian, Black,
-    Other, Unknown. Guidance (https://pubmed.ncbi.nlm.nih.gov/38987774/) [default
+    Other, Unknown. Guidance: https://pubmed.ncbi.nlm.nih.gov/38987774/ [default
     ethnicity_cat]
     
     --t1dm_date=YYYY-MM-DD
@@ -65,9 +73,9 @@ input variables, find
     https://www.opencodelists.org/codelist/user/alainamstutz/type-1-diabetes-secondary-care/5eab6d93/)
     care [default t1dm_date]
     
-    --tmp_t1dm_ctv3_date=YYYY-MM-DD
+    --tmp_t1dm_primarycare_date=YYYY-MM-DD
     First type 1 DM diagnosis date, from primary care only [default
-    tmp_t1dm_ctv3_date]
+    tmp_t1dm_primarycare_date]
     
     --tmp_t1dm_count_num=T1DM_COUNT_VARNAME
     Count of all recorded Type 1 DM diagnosis codes, from both primary and
@@ -80,9 +88,9 @@ input variables, find
     https://www.opencodelists.org/codelist/user/alainamstutz/type-2-diabetes-secondary-care/77bae0c8/)
     care [default t2dm_date]
     
-    --tmp_t2dm_ctv3_date=YYYY-MM-DD
+    --tmp_t2dm_primarycare_date=YYYY-MM-DD
     First type 2 DM diagnosis date, from primary care only [default
-    tmp_t2dm_ctv3_date]
+    tmp_t2dm_primarycare_date]
     
     --tmp_t2dm_count_num=T2DM_COUNT_VARNAME
     Count of all recorded Type 2 DM diagnosis codes, from both primary and
@@ -109,12 +117,12 @@ input variables, find
     https://www.opencodelists.org/codelist/user/hjforbes/nondiagnostic-diabetes-codes/50f30a3b/)
     only [default tmp_poccdm_date]
     
-    --tmp_poccdm_ctv3_count_num=NON_DIAG_DM_CODE_COUNT_VARNAME
+    --tmp_poccdm_primarycare_count_num=NON_DIAG_DM_CODE_COUNT_VARNAME
     Count of all recorded Non-diagnostic DM codes, from primary care only [default
-    tmp_poccdm_ctv3_count_num]
+    tmp_poccdm_primarycare_count_num]
     
     --tmp_max_hba1c_mmol_mol_num=MAX_HBA1C_VARNAME
-    Maximum HbA1c value recorded in query period, in mmol/mol (use
+    Maximum HbA1c value recorded in query period, in mmol/mol (e.g.
     https://www.opencodelists.org/codelist/opensafely/glycated-haemoglobin-hba1c-tests-numerical-value/5134e926/)
     from primary care only [default tmp_max_hba1c_mmol_mol_num]
     
@@ -147,6 +155,35 @@ input variables, find
     otherdm_date, gestationaldm_date, tmp_poccdm_date,
     tmp_nonmetform_drugs_dmd_date, and tmp_diabetes_medication_date [default
     tmp_first_diabetes_diag_date]
+    
+    --gestationaldm_date_sources=DIAGNOSIS_DATE_SOURCES
+    Choose which dates are the source to define the baseline date for Gestational
+    DM (minimum of these). Options: t2dm_date, t1dm_date, gestationaldm_date,
+    otherdm_date, tmp_diabetes_medication_date, tmp_max_hba1c_date (If >= 47.5
+    mmol/mol, see step 7), tmp_poccdm_date (If > 5 process codes, see step 7)
+    [default gestationaldm_date]
+    
+    --t1dm_date_sources=DIAGNOSIS_DATE_SOURCES
+    Choose which dates are the source to define the baseline date for Type 1 DM
+    (minimum of these). Options: t2dm_date, t1dm_date, gestationaldm_date,
+    otherdm_date, tmp_diabetes_medication_date, tmp_max_hba1c_date (If >= 47.5
+    mmol/mol, see step 7), tmp_poccdm_date (If > 5 process codes, see step 7)
+    [default t2dm_date,t1dm_date,otherdm_date,tmp_diabetes_medication_date]
+    
+    --t2dm_date_sources=DIAGNOSIS_DATE_SOURCES
+    Choose which dates are the source to define the baseline date for Type 2 DM
+    (minimum of these). Options: t2dm_date, t1dm_date, gestationaldm_date,
+    otherdm_date, tmp_diabetes_medication_date, tmp_max_hba1c_date (If >= 47.5
+    mmol/mol, see step 7), tmp_poccdm_date (If > 5 process codes, see step 7)
+    [default t2dm_date,t1dm_date,otherdm_date,tmp_diabetes_medication_date]
+    
+    --otherdm_date_sources=DIAGNOSIS_DATE_SOURCES
+    Choose which dates are the source to define the baseline date for Other DM
+    (minimum of these). Options: t2dm_date, t1dm_date, gestationaldm_date,
+    otherdm_date, tmp_diabetes_medication_date, tmp_max_hba1c_date (If >= 47.5
+    mmol/mol, see step 7), tmp_poccdm_date (If > 5 process codes, see step 7)
+    [default
+    t2dm_date,t1dm_date,otherdm_date,tmp_diabetes_medication_date,tmp_max_hba1c_date,tmp_poccdm_date]
     
     --df_output=FILENAME.CSV.GZ
     Output dataset. csv.gz or rds file. This is assumed to be added to the
@@ -190,7 +227,7 @@ diabetes_algo:
   run: >
     diabetes-algo:[version]
       --birth_date=your_dob_date_variable
-      --tmp_t1dm_ctv3_date=your_t2dm_from_primcare_date_variable
+      --tmp_t1dm_primarycare_date=your_t2dm_from_primcare_date_variable
       --tmp_max_hba1c_mmol_mol_num=your_max_hba1c_num_variable
       --## more arguments
       --df_output=data_processed.csv.gz #or data_processed.rds
@@ -217,7 +254,7 @@ diabetes_algo_via_config:
   config:
       df_input: input.arrow
       birth_date: your_dob_date_variable
-      tmp_t1dm_ctv3_date: your_t2dm_from_primcare_date_variable
+      tmp_t1dm_primarycare_date: your_t2dm_from_primcare_date_variable
       ## more arguments
       df_output: data_processed.csv.gz #or data_processed.rds
   needs:

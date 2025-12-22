@@ -1,3 +1,9 @@
+# [v0.0.10](https://github.com/opensafely-actions/diabetes-algo/releases/tag/v0.0.10)
+
+* Updated CHANGELOG
+* Updated the algorithm to allow user-customizable source definition of the diagnosis dates
+* Clarified that the provided codelists are just examples
+
 # [v0.0.9](https://github.com/opensafely-actions/diabetes-algo/releases/tag/v0.0.9)
 
 * Updated CHANGELOG

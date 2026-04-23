@@ -1,3 +1,7 @@
+# [v0.0.13](https://github.com/opensafely-actions/diabetes-algo/releases/tag/v0.0.13)
+
+* Add omitted entry to CHANGELOG
+
 # [v0.0.12](https://github.com/opensafely-actions/diabetes-algo/releases/tag/v0.0.12)
 
 * Bump pipeline version in *project.yaml*

@@ -1,3 +1,7 @@
+# [v0.0.11](https://github.com/opensafely-actions/diabetes-algo/releases/tag/v0.0.11)
+
+* Bump pipeline version in *project.yaml*
+
 # [v0.0.10](https://github.com/opensafely-actions/diabetes-algo/releases/tag/v0.0.10)
 
 * Updated CHANGELOG

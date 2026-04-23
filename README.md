@@ -211,10 +211,12 @@ Figure 1.
 
 This action can be specified in the `project.yaml` with its options at
 their default values as follows, where you should replace `[version]`
-with the latest tag from [here](xy), e.g., `v0.0.1`. Note that no space
-is allowed between `diabetes-algo:` and `[version]`. This action can be
-run specifying input arguments as follows (in YAML “\>” indicates to
-treat the subsequent nested lines as a single line).
+with the latest tag from
+[here](https://github.com/opensafely-actions/diabetes-algo/tags), e.g.,
+`v0.0.1`. Note that no space is allowed between `diabetes-algo:` and
+`[version]`. This action can be run specifying input arguments as
+follows (in YAML “\>” indicates to treat the subsequent nested lines as
+a single line).
 
 ``` yaml
 generate_dataset:
@@ -227,7 +229,7 @@ diabetes_algo:
   run: >
     diabetes-algo:[version]
       --birth_date=your_dob_date_variable
-      --tmp_t1dm_primarycare_date=your_t2dm_from_primcare_date_variable
+      --tmp_t1dm_primarycare_date=your_t1dm_from_primcare_date_variable
       --tmp_max_hba1c_mmol_mol_num=your_max_hba1c_num_variable
       --## more arguments
       --df_output=data_processed.csv.gz #or data_processed.rds
@@ -254,7 +256,7 @@ diabetes_algo_via_config:
   config:
       df_input: input.arrow
       birth_date: your_dob_date_variable
-      tmp_t1dm_primarycare_date: your_t2dm_from_primcare_date_variable
+      tmp_t1dm_primarycare_date: your_t1dm_from_primcare_date_variable
       ## more arguments
       df_output: data_processed.csv.gz #or data_processed.rds
   needs:

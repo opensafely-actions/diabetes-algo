@@ -12,7 +12,7 @@
 # 10 Save output dataset (data_processed.rds)
 ################################################################################
 
-print("diabetes-algo version: v0.0.10")
+print("diabetes-algo version: v0.0.11")
 
 ################################################################################
 # Import libraries and functions

@@ -1,6 +1,10 @@
-# [v0.0.11](https://github.com/opensafely-actions/diabetes-algo/releases/tag/v0.0.11)
+# [v0.0.12](https://github.com/opensafely-actions/diabetes-algo/releases/tag/v0.0.12)
 
 * Bump pipeline version in *project.yaml*
+
+# [v0.0.11](https://github.com/opensafely-actions/diabetes-algo/releases/tag/v0.0.11)
+
+* Bump actions/checkout from 5 to 6
 
 # [v0.0.10](https://github.com/opensafely-actions/diabetes-algo/releases/tag/v0.0.10)
 

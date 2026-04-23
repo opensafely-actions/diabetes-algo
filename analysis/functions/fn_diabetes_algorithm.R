@@ -128,7 +128,7 @@ fn_diabetes_algorithm <- function(data, column_mapping, diagnosis_date_sources =
 
     ## --- Step 6e. Type 2 DM diagnostic code is more recent than type 1 DM diagnostic code? Denominator: Step 6d == No
     mutate(step_6e = case_when(step_6d == "No" & t2dm_date > t1dm_date ~ "Yes",
-                               step_6d == "No" & t2dm_date <= t1dm_date ~ "No", # I think the second part of this condition can be removed, since all that end up here have a t2dm_date and t1dm_date (step 6)? Currently Type 1 overrules Type 2 in case they have exactly the same date (extrem edge case), which I think it reasonable. If we remove the second part, the same will apply by default.
+                               step_6d == "No" & t2dm_date <= t1dm_date ~ "No", # I think the second part of this condition can be removed, since all that end up here have a t2dm_date and t1dm_date (step 6)? Currently Type 1 overrules Type 2 in case they have exactly the same date (extreme edge case), which I think is reasonable. If we remove the second part, the same will apply by default.
                                TRUE ~ NA_character_) # NA will only be fulfilled if not part of denominator
     ) %>%
 

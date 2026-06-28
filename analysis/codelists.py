@@ -33,3 +33,4 @@ hba1c_snomed = codelist_from_csv("codelists/opensafely-glycated-haemoglobin-hba1
 insulin_dmd = codelist_from_csv("codelists/opensafely-insulin-medication.csv",column="id")
 antidiabetic_drugs_dmd = codelist_from_csv("codelists/opensafely-antidiabetic-drugs.csv",column="id")
 non_metformin_dmd = codelist_from_csv("codelists/user-alainamstutz-non-metformin-oral-antidiabetic.csv",column="code")
+## additional codelists for the DDSC algorithm

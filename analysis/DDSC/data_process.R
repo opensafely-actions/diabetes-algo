@@ -288,6 +288,9 @@ data_processed_new <- data_processed
 ################################################################################
 # Save output
 ################################################################################
+# check if sub directory exists, create if not
+fs::dir_create(here::here("output/DDSC"))
+
 print("Save output")
-write_rds(data_processed, paste0("output/", opt$df_output))
-write_csv(data_processed, here::here("output", paste0(opt$df_output)), na = "") # important to specify (na = ""), otherwise @table_from_file("output/data/data_processed.csv.gz") doesn't work (accepts empty or a date, but not NA)
+write_rds(data_processed, paste0("output/DDSC/", opt$df_output))
+write_csv(data_processed, here::here("output/DDSC", paste0(opt$df_output)), na = "") # important to specify (na = ""), otherwise @table_from_file("output/DDSC/data_processed.csv.gz") doesn't work (accepts empty or a date, but not NA)

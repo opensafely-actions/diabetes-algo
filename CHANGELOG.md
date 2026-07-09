@@ -1,3 +1,7 @@
+# [v0.0.14](https://github.com/opensafely-actions/diabetes-algo/releases/tag/v0.0.14)
+
+* Bump actions/checkout from 6 to 7
+
 # [v0.0.13](https://github.com/opensafely-actions/diabetes-algo/releases/tag/v0.0.13)
 
 * Add omitted entry to CHANGELOG

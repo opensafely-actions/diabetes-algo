@@ -12,7 +12,7 @@
 # 10 Save output dataset (data_processed.rds)
 ################################################################################
 
-print("diabetes-algo version: v0.0.13")
+print("diabetes-algo version: v0.0.15")
 
 ################################################################################
 # Import libraries and functions
@@ -227,7 +227,7 @@ option_list <- list(
     "--df_output",
     type = "character",
     default = "data_processed.csv.gz",
-    help = "Output dataset. csv.gz or rds file. This is assumed to be added to the directory 'output' [default %default]",
+    help = "Output dataset. csv.gz or rds file. This is assumed to be added to the directory 'output/Eastwood' [default %default]",
     metavar = "filename.csv.gz"
   ),
   make_option(

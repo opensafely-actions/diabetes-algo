@@ -1,3 +1,13 @@
+# [v0.0.15](https://github.com/opensafely-actions/diabetes-algo/releases/tag/v0.0.15)
+
+* Restructured `analysis/` into algorithm-specific `Eastwood/` and `DDSC/` subfolders, in preparation for the new DDSC algorithm
+* `action.yaml` and `project.yaml` now run `analysis/Eastwood/data_process.R`, and outputs are written to `output/Eastwood/` (previously `analysis/data_process.R` and `output/`)
+* Updated README to reflect the new output paths
+
+# [v0.0.14](https://github.com/opensafely-actions/diabetes-algo/releases/tag/v0.0.14)
+
+* Bump actions/checkout from 6 to 7
+
 # [v0.0.13](https://github.com/opensafely-actions/diabetes-algo/releases/tag/v0.0.13)
 
 * Add omitted entry to CHANGELOG

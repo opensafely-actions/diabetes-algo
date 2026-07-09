@@ -187,7 +187,7 @@ input variables, find
     
     --df_output=FILENAME.CSV.GZ
     Output dataset. csv.gz or rds file. This is assumed to be added to the
-    directory 'output' [default data_processed.csv.gz]
+    directory 'output/Eastwood' [default data_processed.csv.gz]
     
     --config=
     Config parsed from the YAML
@@ -237,7 +237,7 @@ diabetes_algo:
   - generate_dataset
   outputs:
     highly_sensitive:
-      csv.gz: output/data_processed.csv.gz #or data_processed.rds
+      csv.gz: output/Eastwood/data_processed.csv.gz #or data_processed.rds
 ```
 
 Alternatively, the input arguments can also be specified using a
@@ -263,7 +263,7 @@ diabetes_algo_via_config:
   - generate_dataset
   outputs:
     highly_sensitive:
-      csv.gz: output/data_processed.csv.gz #or data_processed.rds
+      csv.gz: output/Eastwood/data_processed.csv.gz #or data_processed.rds
 ```
 
 For more information about reusable actions see

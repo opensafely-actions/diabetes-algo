@@ -12,7 +12,7 @@
 # 10 Save output dataset (data_processed.rds)
 ################################################################################
 
-print("diabetes-algo version: v0.0.13")
+print("diabetes-algo version: v0.0.15")
 
 ################################################################################
 # Import libraries and functions
@@ -26,7 +26,7 @@ library('dplyr')
 library('tidyr')
 
 print("Import diabetes algo function")
-source(here::here("analysis", "functions", "fn_diabetes_algorithm.R"))
+source(here::here("analysis", "DDSC", "functions", "fn_diabetes_algorithm.R"))
 
 ################################################################################
 # Define flag style arguments using the optparse package
@@ -112,7 +112,7 @@ option_list <- list(
               help = "Choose which dates are the source to define the baseline date for Other DM (minimum of these). Options: t2dm_date, t1dm_date, gestationaldm_date, otherdm_date, tmp_diabetes_medication_date, tmp_max_hba1c_date (If >= 47.5 mmol/mol, see step 7), tmp_poccdm_date (If > 5 process codes, see step 7) [default %default]",
               metavar = "diagnosis_date_sources"),
   make_option("--df_output", type = "character", default = "data_processed.csv.gz",
-              help = "Output dataset. csv.gz or rds file. This is assumed to be added to the directory 'output' [default %default]",
+              help = "Output dataset. csv.gz or rds file. This is assumed to be added to the directory 'output/DDSC' [default %default]",
               metavar = "filename.csv.gz"),
   make_option("--config", type = "character", default = "",
               help = "Config parsed from the YAML",

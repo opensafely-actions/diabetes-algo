@@ -1,1 +1,1 @@
-run: r:v2 analysis/data_process.R
+run: r:v2 analysis/Eastwood/data_process.R

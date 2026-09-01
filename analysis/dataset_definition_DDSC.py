@@ -147,7 +147,7 @@ get_two_consecutive_high_hba1c(
 
 
 # Date of diagnosis for DDSC 
-dataset.first_diabetes_diag_date_or_first_high_hba1c = minimum_of(
+dataset.first_diabetes_diag_or_high_hba1c_date = minimum_of(
     dataset.first_diabetes_diag_date,
     dataset.first_high_hba1c_date
 )

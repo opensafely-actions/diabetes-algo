@@ -6,27 +6,27 @@ fn_diabetes_algorithm <- function(data, column_mapping) {
       birth_date = all_of(column_mapping$birth_date),
       last_observable_date = all_of(column_mapping$last_observable_date),
       t1dm_date = all_of(column_mapping$t1dm_date),
-      t1dm_count_num = all_of(column_mapping$tmp_t1dm_count_num),
+      t1dm_count_num = all_of(column_mapping$t1dm_count_num),
       t2dm_date = all_of(column_mapping$t2dm_date),
-      t2dm_count_num = all_of(column_mapping$tmp_t2dm_count_num),
+      t2dm_count_num = all_of(column_mapping$t2dm_count_num),
       otherdm_date = all_of(column_mapping$otherdm_date),
       # No codelist yet
       nosdm_date = all_of(column_mapping$nosdm_date),
+      antidiabetic_drug_date = all_of(column_mapping$antidiabetic_drug_date),
+      diabetes_medication_date = all_of(column_mapping$diabetes_medication_date),
+      insulin_date = all_of(column_mapping$insulin_date),
       # new variable
       two_consecutive_high_hba1c = all_of(column_mapping$two_consecutive_high_hba1c),
-      insulin_date = all_of(column_mapping$insulin_date),
       last_insulin_date = all_of(column_mapping$last_insulin_date),
-      antidiabetic_drug_date = all_of(column_mapping$antidiabetic_drugs_dmd_date),
-      diabetes_medication_date = all_of(column_mapping$diabetes_medication_date),
-      first_diabetes_diag_date_or_first_high_hba1c = all_of(column_mapping$first_diabetes_diag_date_or_first_high_hba1c)
+      first_diabetes_diag_or_high_hba1c_date = all_of(column_mapping$first_diabetes_diag_or_high_hba1c_date)
       )
 
   data <- data %>%
     mutate(
     ## --- Step 0: Temporary helper variables ---
       tmp_birth_year_num = as.numeric(format(as.Date(birth_date, format = "%Y-%m-%d"), "%Y")),
-      tmp_first_diabetes_diag_date_or_first_high_hba1c = as.integer(format(first_diabetes_diag_date_or_first_high_hba1c, "%Y")), # includes t2dm_date, t1dm_date, otherdm_date, nosdm_date, and first high HbA1c
-      tmp_age_1st_diag = tmp_first_diabetes_diag_date_or_first_high_hba1c - tmp_birth_year_num,
+      tmp_first_diabetes_diag_or_high_hba1c_date = as.integer(format(first_diabetes_diag_or_high_hba1c_date, "%Y")), # includes t2dm_date, t1dm_date, otherdm_date, nosdm_date, and first high HbA1c
+      tmp_age_1st_diag = tmp_first_diabetes_diag_or_high_hba1c_date - tmp_birth_year_num,
       tmp_age_1st_diag = replace(tmp_age_1st_diag, which(tmp_age_1st_diag < 0), NA),
       # Not currently on insulin: no insulin prescription within the last 6 months
       tmp_not_currently_on_insulin = case_when(
@@ -42,16 +42,16 @@ fn_diabetes_algorithm <- function(data, column_mapping) {
                                                       ),
       # Create flag for on insulin within 1 year of diagnosis
       tmp_insulin_within_1year_diag = case_when(
-                                                !is.na(insulin_date) & !is.na(first_diabetes_diag_date_or_first_high_hba1c) &
-                                                as.numeric(insulin_date - first_diabetes_diag_date_or_first_high_hba1c) >=0 & 
-                                                as.numeric(insulin_date - first_diabetes_diag_date_or_first_high_hba1c) <= 365 ~ 1,
-                                                TRUE ~ 0
+                                                !is.na(insulin_date) & !is.na(first_diabetes_diag_or_high_hba1c_date) &
+                                                as.numeric(insulin_date - first_diabetes_diag_or_high_hba1c_date) >=0 & 
+                                                as.numeric(insulin_date - first_diabetes_diag_or_high_hba1c_date) <= 365 ~ 1,
+                                                TRUE ~ NA_integer_
                                                 ),
 
       # More than 1 year from date of diagnosis to last observable date
       tmp_more_than_1year_date_diagnosis_to_last_observable_date = case_when(
-                                                                             !is.na(first_diabetes_diag_date_or_first_high_hba1c) & !is.na(last_observable_date) & 
-                                                                             as.numeric(last_observable_date - first_diabetes_diag_date_or_first_high_hba1c) > 365 ~ 1,
+                                                                             !is.na(first_diabetes_diag_or_high_hba1c_date) & !is.na(last_observable_date) & 
+                                                                             as.numeric(last_observable_date - first_diabetes_diag_or_high_hba1c_date) > 365 ~ 1,
                                                                              TRUE ~ NA_integer_
                                                                  ),
       # Flag for greater than or equal to 2
@@ -143,17 +143,17 @@ mutate (
             (step_1 == "Yes" ) ~ "DM Other",
 
                 # DM unlikely conditions
-            (step_1 == "No" & step_2 == "Yes" & step_3 == "No" & step_4 == "No" & step_5 == "No" & step_6 == "No" & step_7 == "No" & step_8 == "No" & step_9 == "No") | 
-                (step_1 == "No" & step_2 == "No" & step_4 == "No" & step_5 == "No" & step_6 == "No" & step_7 == "No" & step_8 == "No" & step_9 == "No") |
-                (step_1 == "No" & step_2 == "Yes" & step_3 == "Yes" & step_3_1 == "No" & step_8 == "No" & step_9 == "No")  ~ "DM unlikely",
+            (    step_1 == "No" & step_2 == "Yes" & step_3 == "No"  & step_4 == "No" & step_5 == "No" & step_6 == "No" & step_7 == "No" & step_8 == "No" & step_9 == "No") | 
+                (step_1 == "No" & step_2 == "Yes" & step_3 == "Yes" & step_3_1 == "No"                                                  & step_8 == "No" & step_9 == "No") |
+                (step_1 == "No" & step_2 == "No"  &                   step_4 == "No" & step_5 == "No" & step_6 == "No" & step_7 == "No" & step_8 == "No" & step_9 == "No")  ~ "DM unlikely",
 
               # DM Not Otherwise Specified conditions
-            (step_1 == "No" & step_2 == "Yes" & step_3 == "No" & step_4 == "No" & step_5 == "No" & step_6 == "No" & step_7 == "No" & step_8 == "Yes") |
-                (step_1 == "No" & step_2 == "No" & step_4 == "No" & step_5 == "No" & step_6 == "No" & step_7 == "No" & step_8 == "Yes") |
+            (    step_1 == "No" & step_2 == "Yes" & step_3 == "No" & step_4 == "No" & step_5 == "No" & step_6 == "No" & step_7 == "No" & step_8 == "Yes") |
+                (step_1 == "No" & step_2 == "No"  &                  step_4 == "No" & step_5 == "No" & step_6 == "No" & step_7 == "No" & step_8 == "Yes") |
                 (step_1 == "No" & step_2 == "Yes" & step_3 == "No" & step_4 == "No" & step_5 == "No" & step_6 == "No" & step_7 == "No" & step_8 == "No" & step_9 == "Yes") |
-                (step_1 == "No" & step_2 == "No" & step_4 == "No" & step_5 == "No" & step_6 == "No" & step_7 == "No" & step_8 == "No" & step_9 == "Yes") |
-                (step_1 == "No" & step_2 == "Yes" & step_3 == "Yes" & step_3_1 == "No" & step_8 == "Yes") |
-                (step_1 == "No" & step_2 == "Yes" & step_3 == "Yes" & step_3_1 == "No" & step_8 == "No" & step_9 == "Yes") ~ "DM NOS",
+                (step_1 == "No" & step_2 == "No"  &                  step_4 == "No" & step_5 == "No" & step_6 == "No" & step_7 == "No" & step_8 == "No" & step_9 == "Yes") |
+                (step_1 == "No" & step_2 == "Yes" & step_3 == "Yes" & step_3_1 == "No" &                                                 step_8 == "Yes") |
+                (step_1 == "No" & step_2 == "Yes" & step_3 == "Yes" & step_3_1 == "No" &                                                 step_8 == "No" & step_9 == "Yes") ~ "DM NOS",
               
 
               # T2DM conditions 

@@ -142,7 +142,7 @@ option_list <- list(
     metavar = "YYYY-MM-DD"
   ),
   make_option(
-    "--first_diabetes_diag_date_or_first_high_hba1c",
+    "--first_diabetes_diag_or_high_hba1c_date",
     type = "character",
     default = "first_diabetes_diag_date_or_first_high_hba1c",
     help = "First diabetes diagnosis date variable [default %default]",
@@ -221,7 +221,7 @@ column_mapping <- list(
   last_insulin_date = opt$last_insulin_date,
   antidiabetic_drug_date = opt$antidiabetic_drug_date,
   diabetes_medication_date = opt$diabetes_medication_date,
-  first_diabetes_diag_date_or_first_high_hba1c = opt$first_diabetes_diag_date_or_first_high_hba1c
+  first_diabetes_diag_or_high_hba1c_date = opt$first_diabetes_diag_or_high_hba1c_date
 )
 
 print("Double-check if all required variables part of user data")

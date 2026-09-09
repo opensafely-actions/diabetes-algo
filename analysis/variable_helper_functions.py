@@ -19,6 +19,14 @@ def count_matching_event_clinical_ctv3_before(codelist, index_date, where=True):
         .where(clinical_events.date.is_on_or_before(index_date))
         .count_for_patient()
     )
+# Snomed
+def count_matching_event_clinical_snomed_before(codelist, index_date, where=True):
+    return(
+        clinical_events.where(where)
+        .where(clinical_events.snomedct_code.is_in(codelist))
+        .where(clinical_events.date.is_on_or_before(index_date))
+        .count_for_patient()
+    )
 
 ## In SECONDARY CARE (Hospital Episodes)
 def count_matching_event_apc_before(codelist, baseline_date, only_prim_diagnoses=False, where=True):

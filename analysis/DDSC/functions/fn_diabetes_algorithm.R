@@ -78,7 +78,7 @@ fn_diabetes_algorithm <- function(data, column_mapping) {
     ## --- Step 3: Not currently on insulin AND >1 year from diagnosis? Denominator: Step 2 == Yes
     mutate(step_3 = case_when(step_2 == "Yes" & !is.na(tmp_not_currently_on_insulin) & !is.na(tmp_more_than_1year_date_diagnosis_to_last_observable_date) ~ "Yes",
                               step_2 == "Yes" ~ "No",
-                              step_2 == "No" ~ "No", # Everyone else with Yes to setp 2 but 
+                              step_2 == "No" ~ "No", # Everyone else with Yes to step 2 but 
                               TRUE ~ NA_character_) # NA will only be fulfilled for people not part of denominator
            ) %>%
 
@@ -157,19 +157,19 @@ mutate (
               
 
               # T2DM conditions 
-            (step_1 == "No" & step_2 == "Yes" & step_3 == "Yes" & step_3_1 == "Yes") | 
-              (step_1 == "No" & step_2 == "Yes" & step_3 == "No" & step_4 == "No" & step_5 == "No" & step_6 == "Yes" & step_6_1 == "No") |
-              (step_1 == "No" & step_2 == "No" & step_4 == "No" & step_5 == "No" & step_6 == "Yes" & step_6_1 == "No") |
-              (step_1 == "No" & step_2 == "Yes" & step_3 == "No" & step_4 == "No" & step_5 == "Yes") | 
-              (step_1 == "No" & step_2 == "No" & step_4 == "No" & step_5 == "Yes") ~ "T2DM" ,
+            (  step_1 == "No" & step_2 == "Yes" & step_3 == "Yes" & step_3_1 == "Yes") | 
+              (step_1 == "No" & step_2 == "Yes" & step_3 == "No"  & step_4 == "No"       & step_5 == "Yes") | 
+              (step_1 == "No" & step_2 == "Yes" & step_3 == "No"  & step_4 == "No"       & step_5 == "No"     & step_6 == "Yes" & step_6_1 == "No") |
+              (step_1 == "No" & step_2 == "No"  & step_4 == "No"  & step_5 == "No"       & step_6 == "Yes"    & step_6_1 == "No") |
+              (step_1 == "No" & step_2 == "No"  & step_4 == "No"  & step_5 == "Yes") ~ "T2DM" ,
 
               # T1DM conditions
-            (step_1 == "No" & step_2 == "Yes" & step_3 == "No" & step_4 == "Yes") |
-              (step_1 == "No" & step_2 == "No" & step_4 == "Yes") |
-              (step_1 == "No" & step_2 == "Yes" & step_3 == "No" & step_4 == "No" & step_5 == "No" & step_6 == "Yes" & step_6_1 == "Yes") |
-              (step_1 == "No" & step_2 == "No" & step_4 == "No" & step_5 == "No" & step_6 == "Yes" & step_6_1 == "Yes") |
-              (step_1 == "No" & step_2 == "Yes" & step_3 == "No" & step_4 == "No" & step_5 == "No" & step_6 == "No" & step_7 == "Yes") |
-              (step_1 == "No" & step_2 == "No" & step_4 == "No" & step_5 ==  "No" & step_6 == "No" & step_7 == "Yes") ~ "T1DM", 
+            (  step_1 == "No" & step_2 == "Yes" & step_3 == "No" & step_4 == "Yes") |
+              (step_1 == "No" & step_2 == "No"  & step_4 == "Yes") |
+              (step_1 == "No" & step_2 == "Yes" & step_3 == "No" & step_4 == "No" & step_5 == "No"  & step_6 == "Yes"      & step_6_1 == "Yes") |
+              (step_1 == "No" & step_2 == "No"  & step_4 == "No" & step_5 == "No" & step_6 == "Yes" & step_6_1 == "Yes") |
+              (step_1 == "No" & step_2 == "Yes" & step_3 == "No" & step_4 == "No" & step_5 == "No"  & step_6 == "No"       & step_7 == "Yes") |
+              (step_1 == "No" & step_2 == "No"  & step_4 == "No" & step_5 == "No" & step_6 == "No"  & step_7 == "Yes") ~ "T1DM", 
               
 
 

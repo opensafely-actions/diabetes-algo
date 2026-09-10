@@ -144,7 +144,7 @@ option_list <- list(
   make_option(
     "--first_diabetes_diag_or_high_hba1c_date",
     type = "character",
-    default = "first_diabetes_diag_date_or_first_high_hba1c",
+    default = "first_diabetes_diag_or_high_hba1c_date",
     help = "First diabetes diagnosis date variable [default %default]",
     metavar = "YYYY-MM-DD"
   ),

@@ -122,7 +122,8 @@ dataset.first_diabetes_diag_date = minimum_of(
 )
 
 # Date of first high HbA1c measure if more than a year before first diabetes code
-dataset.first_high_hba1c_date = ( 
+dataset.first_high_hba1c_date = case( 
+  when(dataset.first_diabetes_diag_date.is_not_null()).then(
   clinical_events.where(
     clinical_events.snomedct_code.is_in(hba1c_snomed))
     .where(clinical_events.numeric_value >= 48 )
@@ -130,7 +131,16 @@ dataset.first_high_hba1c_date = (
     .sort_by(clinical_events.date)
     .first_for_patient() 
     .date
-)
+),
+  when(dataset.first_diabetes_diag_date.is_null()).then(
+    clinical_events.where(
+    clinical_events.snomedct_code.is_in(hba1c_snomed))
+    .where(clinical_events.numeric_value >= 48)
+    .sort_by(clinical_events.date)
+    .first_for_patient()
+    .date
+  )
+  )
 
 ## Get two consecutive high hba1c 
 get_two_consecutive_high_hba1c(

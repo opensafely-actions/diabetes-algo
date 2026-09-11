@@ -92,9 +92,14 @@ dataset.tmp_t2dm_count_num = tmp_t2dm_primarycare_count + tmp_t2dm_hes_count
 
 ## Diabetes unspecified/other
 # First date
-dataset.otherdm_date = first_matching_event_clinical_ctv3_before(diabetes_other_ctv3, index_date).date
+dataset.otherdm_date = minimum_of(
+    (first_matching_event_clinical_snomed_before(diabetes_other_snomed + diabetes_nos_snomed, index_date).date),
+    (first_matching_event_apc_before(diabetes_nos_icd10, index_date).admission_date)
+)
 # Count codes
-dataset.tmp_otherdm_count_num = count_matching_event_clinical_ctv3_before(diabetes_other_ctv3, index_date)
+tmp_otherdm_primarycare_count = count_matching_event_clinical_snomed_before(diabetes_other_snomed + diabetes_nos_snomed, index_date)
+tmp_otherdm_hes_count = count_matching_event_apc_before(diabetes_nos_icd10, index_date)
+dataset.tmp_otherdm_count_num = tmp_otherdm_primarycare_count + tmp_otherdm_hes_count
 
 ## Gestational diabetes
 # First date from primary+secondary

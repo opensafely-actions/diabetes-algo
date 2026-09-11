@@ -6,47 +6,59 @@
       "downloaded_at": "2025-01-06 21:52:13.498294Z",
       "sha": "8b849b5b785d80306e488d0109640c8c1d2da01b"
     },
-    "user-hjforbes-type-1-diabetes.csv": {
-      "id": "user/hjforbes/type-1-diabetes/674fbd7a",
-      "url": "https://www.opencodelists.org/codelist/user/hjforbes/type-1-diabetes/674fbd7a/",
-      "downloaded_at": "2024-12-09 16:25:14.401143Z",
-      "sha": "54a7772024e03c2129cb0c0c7ba77944eacd054a"
+    "nhsd-primary-care-domain-refsets-dmtype1_cod.csv": {
+      "id": "nhsd-primary-care-domain-refsets/dmtype1_cod/2d672380",
+      "url": "https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/dmtype1_cod/2d672380/",
+      "downloaded_at": "2026-09-09 20:54:01.817017+00:00Z",
+      "sha": "c1f4a42b1f976be2f8ff9a0be2845ed81e620fdc"
     },
-    "user-hjforbes-type-2-diabetes.csv": {
-      "id": "user/hjforbes/type-2-diabetes/3530d710",
-      "url": "https://www.opencodelists.org/codelist/user/hjforbes/type-2-diabetes/3530d710/",
-      "downloaded_at": "2024-12-09 16:25:14.572591Z",
-      "sha": "08421a5b1e92d07e47cbab2e12ecd71856cee98a"
+    "bristol-type-1-diabetes-icd10.csv": {
+      "id": "bristol/type-1-diabetes-icd10/4c7d263c",
+      "url": "https://www.opencodelists.org/codelist/bristol/type-1-diabetes-icd10/4c7d263c/",
+      "downloaded_at": "2026-09-11 11:35:39.262486+00:00Z",
+      "sha": "6bcd6278138a5e31ef52578a255cb16c8ce4ba2d"
     },
-    "user-hjforbes-other-or-nonspecific-diabetes.csv": {
-      "id": "user/hjforbes/other-or-nonspecific-diabetes/0311f0a6",
-      "url": "https://www.opencodelists.org/codelist/user/hjforbes/other-or-nonspecific-diabetes/0311f0a6/",
-      "downloaded_at": "2024-12-09 16:25:14.726858Z",
-      "sha": "1461877af2c069504535089d669e830616629f67"
+    "nhsd-primary-care-domain-refsets-dmtype2_cod.csv": {
+      "id": "nhsd-primary-care-domain-refsets/dmtype2_cod/3ae4e34e",
+      "url": "https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/dmtype2_cod/3ae4e34e/",
+      "downloaded_at": "2026-09-09 20:54:02.838702+00:00Z",
+      "sha": "9ae4e751ad57000010c2aa0122b778a2d1b6c6ba"
     },
-    "user-hjforbes-gestational-diabetes.csv": {
-      "id": "user/hjforbes/gestational-diabetes/1ed423d1",
-      "url": "https://www.opencodelists.org/codelist/user/hjforbes/gestational-diabetes/1ed423d1/",
-      "downloaded_at": "2024-12-09 16:25:14.911479Z",
-      "sha": "4298a4affa79a1f04130cf5c630892a25819292c"
-    },
-    "user-alainamstutz-gestational-diabetes-icd10-bristol.csv": {
-      "id": "user/alainamstutz/gestational-diabetes-icd10-bristol/474e7a09",
-      "url": "https://www.opencodelists.org/codelist/user/alainamstutz/gestational-diabetes-icd10-bristol/474e7a09/",
-      "downloaded_at": "2024-12-09 16:26:21.521030Z",
-      "sha": "f5252471f672989c537156c1dcf3a8ffaae6215d"
-    },
-    "user-alainamstutz-type-1-diabetes-secondary-care.csv": {
-      "id": "user/alainamstutz/type-1-diabetes-secondary-care/5eab6d93",
-      "url": "https://www.opencodelists.org/codelist/user/alainamstutz/type-1-diabetes-secondary-care/5eab6d93/",
-      "downloaded_at": "2025-08-04 08:15:10.607489Z",
-      "sha": "e0d47b5cbf9ace24aae5a63a8acbc583de46e120"
-    },
-    "user-alainamstutz-type-2-diabetes-secondary-care.csv": {
-      "id": "user/alainamstutz/type-2-diabetes-secondary-care/77bae0c8",
-      "url": "https://www.opencodelists.org/codelist/user/alainamstutz/type-2-diabetes-secondary-care/77bae0c8/",
-      "downloaded_at": "2025-08-04 08:15:10.654766Z",
+    "bristol-type-2-diabetes-icd10.csv": {
+      "id": "bristol/type-2-diabetes-icd10/58a5f4da",
+      "url": "https://www.opencodelists.org/codelist/bristol/type-2-diabetes-icd10/58a5f4da/",
+      "downloaded_at": "2026-09-11 11:35:39.498944+00:00Z",
       "sha": "44b8f1f210c8af12a54d56a5ad2399849090e7af"
+    },
+    "bristol-diabetes-of-other-specified-aetiology.csv": {
+      "id": "bristol/diabetes-of-other-specified-aetiology/7be94cb0",
+      "url": "https://www.opencodelists.org/codelist/bristol/diabetes-of-other-specified-aetiology/7be94cb0/",
+      "downloaded_at": "2026-09-11 11:35:39.646774+00:00Z",
+      "sha": "c6ea3884ab5f88c5f53a5196a5c36f6b67a3607c"
+    },
+    "bristol-diabetes-not-otherwise-specified.csv": {
+      "id": "bristol/diabetes-not-otherwise-specified/30baf311",
+      "url": "https://www.opencodelists.org/codelist/bristol/diabetes-not-otherwise-specified/30baf311/",
+      "downloaded_at": "2026-09-11 11:35:39.792833+00:00Z",
+      "sha": "058de223f3ef3ad8332813bc6d401bb60c3584f2"
+    },
+    "bristol-diabetes-not-otherwise-specified-icd10.csv": {
+      "id": "bristol/diabetes-not-otherwise-specified-icd10/658c9971",
+      "url": "https://www.opencodelists.org/codelist/bristol/diabetes-not-otherwise-specified-icd10/658c9971/",
+      "downloaded_at": "2026-09-11 11:35:39.939757+00:00Z",
+      "sha": "724e0e3229bfaa5ebe457a0430ff47d37af6eb55"
+    },
+    "nhsd-primary-care-domain-refsets-gestdiab_cod.csv": {
+      "id": "nhsd-primary-care-domain-refsets/gestdiab_cod/247ec712",
+      "url": "https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/gestdiab_cod/247ec712/",
+      "downloaded_at": "2026-09-09 20:54:03.677914+00:00Z",
+      "sha": "dace60e651a7ff2545aae5cece961fc652610b0e"
+    },
+    "bristol-gestational-diabetes-icd10.csv": {
+      "id": "bristol/gestational-diabetes-icd10/014ecc9d",
+      "url": "https://www.opencodelists.org/codelist/bristol/gestational-diabetes-icd10/014ecc9d/",
+      "downloaded_at": "2026-09-11 11:35:40.232394+00:00Z",
+      "sha": "5448acb577ff101f778fc12a045b58c265336da8"
     },
     "user-hjforbes-nondiagnostic-diabetes-codes.csv": {
       "id": "user/hjforbes/nondiagnostic-diabetes-codes/50f30a3b",
@@ -66,11 +78,11 @@
       "downloaded_at": "2024-12-09 16:25:15.790595Z",
       "sha": "821d163d926e12fc6bd07fc78187f2756e1c221f"
     },
-    "user-alainamstutz-non-metformin-oral-antidiabetic.csv": {
-      "id": "user/alainamstutz/non-metformin-oral-antidiabetic/0641be78",
-      "url": "https://www.opencodelists.org/codelist/user/alainamstutz/non-metformin-oral-antidiabetic/0641be78/",
-      "downloaded_at": "2025-10-14 12:18:32.585247Z",
-      "sha": "ac5144461afda949328bc75af177a4e47292ef20"
+    "bristol-non-metformin-oral-antidiabetic.csv": {
+      "id": "bristol/non-metformin-oral-antidiabetic/683f5967",
+      "url": "https://www.opencodelists.org/codelist/bristol/non-metformin-oral-antidiabetic/683f5967/",
+      "downloaded_at": "2026-09-11 11:35:40.829929+00:00Z",
+      "sha": "862a11223c6c9370500a88cd6ed7c5f930da7a11"
     },
     "opensafely-glycated-haemoglobin-hba1c-tests-numerical-value.csv": {
       "id": "opensafely/glycated-haemoglobin-hba1c-tests-numerical-value/5134e926",

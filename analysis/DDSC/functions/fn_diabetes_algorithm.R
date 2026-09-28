@@ -56,7 +56,7 @@ fn_diabetes_algorithm <- function(data, column_mapping) {
                                                                  ),
       # Flag for greater than or equal to 2
       tmp_greater_than_2_step9 = case_when(
-                                            (!is.na(diabetes_medication_date) +
+                                            (!is.na(antidiabetic_drug_date) +
                                             !is.na(two_consecutive_high_hba1c) +
                                             !is.na(insulin_date)) >=2 ~ 1, 
                                             TRUE ~ NA_integer_
@@ -77,9 +77,8 @@ fn_diabetes_algorithm <- function(data, column_mapping) {
 
     ## --- Step 3: Not currently on insulin AND >1 year from diagnosis? Denominator: Step 2 == Yes
     mutate(step_3 = case_when(step_2 == "Yes" & !is.na(tmp_not_currently_on_insulin) & !is.na(tmp_more_than_1year_date_diagnosis_to_last_observable_date) ~ "Yes",
-                              step_2 == "Yes" ~ "No",
-                              step_2 == "No" ~ "No", # Everyone else with Yes to step 2 but 
-                              TRUE ~ NA_character_) # NA will only be fulfilled for people not part of denominator
+                              step_2 == "Yes" ~ "No", 
+                              TRUE ~ NA_character_) # NA will only be fulfilled for people not part of denominator and for step_2 == No
            ) %>%
 
     ## --- Step 3.1:Any diabetes type 2 codes? Denominator: step 3 == Yes
@@ -128,7 +127,7 @@ fn_diabetes_algorithm <- function(data, column_mapping) {
                               TRUE ~ NA_character_) # NA will only be fulfilled if not part of denominator.
            ) %>%
     
-    ## --- Step 9. Greater than or equal to 2 of (antidiabetic_drugs_dmd_date or insulin_dmd_date or greater than or equal to 2 consecutive high hba1c)
+    ## --- Step 9. Greater than or equal to 2 of (antidiabetic_drugs_date or insulin_date or greater than or equal to 2 consecutive high hba1c)
     mutate(step_9 = case_when(step_8 == "No" & !is.na(tmp_greater_than_2_step9) ~ "Yes", # <- Diabetes unlikely 
                               step_8 == "No" ~ "No",
                               TRUE ~ NA_character_)   

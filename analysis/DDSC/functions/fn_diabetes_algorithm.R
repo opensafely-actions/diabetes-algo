@@ -47,6 +47,9 @@ fn_diabetes_algorithm <- function(data, column_mapping) {
                                                 as.numeric(insulin_date - first_diabetes_diag_or_high_hba1c_date) <= 365 ~ 1,
                                                 TRUE ~ NA_integer_
                                                 ),
+     # Date prescribing data starts: This is the earliest diabetes prescription date
+      tmp_first_prescribing_date = min(diabetes_medication_date, na.rm = TRUE)
+
 
       # More than 1 year from date of diagnosis to last observable date
       tmp_more_than_1year_date_diagnosis_to_last_observable_date = case_when(
@@ -70,8 +73,9 @@ fn_diabetes_algorithm <- function(data, column_mapping) {
 
 
     ## --- Step 2: Prescribing data available? Denominator: Step 1 == No 
-    mutate(step_2 = case_when(step_1 == "No" & !is.na(diabetes_medication_date) ~ "Yes",
-                              step_1 == "No" & is.na(diabetes_medication_date) ~ "No",
+    ##------------: "No" if the person dies on or before the data prescribing data starts
+    mutate(step_2 = case_when(step_1 == "No" & (!is.na(tmp_first_prescribing_date) | last_observable_date > tmp_first_prescribing_date) ~ "Yes",
+                              step_1 == "No" & (last_observable_date <= tmp_first_prescribing_date) ~ "No",
                               TRUE ~ NA_character_) # NA will only be fulfilled for people not part of denominator
            ) %>%
 

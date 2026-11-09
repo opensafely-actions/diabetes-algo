@@ -107,9 +107,9 @@ option_list <- list(
     metavar = "YYYY-MM-DD"
   ),
   make_option(
-    "--two_consecutive_high_hba1c",
+    "--two_consecutive_high_hba1c_date",
     type = "character",
-    default = "two_consecutive_high_hba1c",
+    default = "two_consecutive_high_hba1c_date",
     help = "Two consecutive high hba1c , from primary care only [default %default]",
     metavar = "two_consecutive_high_hba1c_varname"
   ),
@@ -216,7 +216,7 @@ column_mapping <- list(
   t2dm_count_num = opt$t2dm_count_num,
   otherdm_date = opt$otherdm_date,
   nosdm_date = opt$nosdm_date,
-  two_consecutive_high_hba1c = opt$two_consecutive_high_hba1c,
+  two_consecutive_high_hba1c_date = opt$two_consecutive_high_hba1c_date,
   insulin_date = opt$insulin_date,
   last_insulin_date = opt$last_insulin_date,
   antidiabetic_drug_date = opt$antidiabetic_drug_date,

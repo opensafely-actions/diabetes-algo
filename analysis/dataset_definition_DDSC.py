@@ -121,26 +121,7 @@ dataset.first_diabetes_diag_date = minimum_of(
   dataset.nosdm_date
 )
 
-# Date of first high HbA1c measure if more than a year before first diabetes code
-dataset.first_high_hba1c_date = case( 
-  when(dataset.first_diabetes_diag_date.is_not_null()).then(
-  clinical_events.where(
-    clinical_events.snomedct_code.is_in(hba1c_snomed))
-    .where(clinical_events.numeric_value >= 48 )
-    .where(clinical_events.date.is_on_or_before(dataset.first_diabetes_diag_date - days(365))) 
-    .sort_by(clinical_events.date)
-    .first_for_patient() 
-    .date
-),
-  when(dataset.first_diabetes_diag_date.is_null()).then(
-    clinical_events.where(
-    clinical_events.snomedct_code.is_in(hba1c_snomed))
-    .where(clinical_events.numeric_value >= 48)
-    .sort_by(clinical_events.date)
-    .first_for_patient()
-    .date
-  )
-  )
+
 
 ## Get two consecutive high hba1c 
 get_two_consecutive_high_hba1c(
@@ -151,11 +132,25 @@ get_two_consecutive_high_hba1c(
     threshold=48,
     gap_days=730,
     limit=30,
-    column_name="two_consecutive_high_hba1c"
+    column_name="two_consecutive_high_hba1c_date"
 )
 
+## Date of first high hba1c from the first two consecutive high hba1c. 
+## It only counts if it is more than 1 year before the first diabetes code. 
+## If there is no diabetes code, it is used as is. 
 
-# first_high_hba1c_date = get_two_consecutive_high_hba1c
+dataset.first_high_hba1c_date = case (
+    when(
+        dataset.first_diabetes_diag_date.is_not_null()
+        & dataset.two_consecutive_high_hba1c_date.is_on_or_before(
+            dataset.first_diabetes_diag_date - days (365)
+        )
+    ).then(dataset.two_consecutive_high_hba1c_date),
+    when(dataset.first_diabetes_diag_date.is_null()).then(
+        dataset.two_consecutive_high_hba1c_date
+    )
+)
+
 
 # Date of diagnosis for DDSC 
 dataset.first_diabetes_diag_or_high_hba1c_date = minimum_of(
@@ -163,3 +158,4 @@ dataset.first_diabetes_diag_or_high_hba1c_date = minimum_of(
     dataset.first_high_hba1c_date
 )
 
+;

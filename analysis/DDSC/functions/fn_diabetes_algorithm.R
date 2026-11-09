@@ -17,7 +17,7 @@ fn_diabetes_algorithm <- function(data, column_mapping) {
       insulin_date = all_of(column_mapping$insulin_date),
       # new variable
       two_consecutive_high_hba1c = all_of(
-        column_mapping$two_consecutive_high_hba1c
+        column_mapping$two_consecutive_high_hba1c_date
       ),
       last_insulin_date = all_of(column_mapping$last_insulin_date),
       first_diabetes_diag_or_high_hba1c_date = all_of(
@@ -68,7 +68,13 @@ fn_diabetes_algorithm <- function(data, column_mapping) {
         TRUE ~ NA_integer_
       ),
       # Date prescribing data starts: This is the earliest diabetes prescription date
-      tmp_first_prescribing_date = min(diabetes_medication_date, na.rm = TRUE),
+      tmp_first_prescribing_date = suppressWarnings(min(diabetes_medication_date, na.rm = TRUE)),
+
+      tmp_prescribing_coverage_available = case_when(
+        is.finite(tmp_first_prescribing_date) & last_observable_date <= 
+        tmp_first_prescribing_date ~ NA_integer_,
+        TRUE ~ 1L
+      ),
 
       # More than 1 year from date of diagnosis to last observable date
       tmp_more_than_1year_date_diagnosis_to_last_observable_date = case_when(
@@ -77,13 +83,13 @@ fn_diabetes_algorithm <- function(data, column_mapping) {
           as.numeric(
             last_observable_date - first_diabetes_diag_or_high_hba1c_date
           ) >
-            365 ~ 1,
+            365 ~ 1, 
         TRUE ~ NA_integer_
       ),
       # Flag for greater than or equal to 2
       tmp_greater_than_2_step9 = case_when(
         (!is.na(antidiabetic_drug_date) +
-          !is.na(two_consecutive_high_hba1c) +
+          !is.na(two_consecutive_high_hba1c_date) +
             !is.na(insulin_date)) >=
           2 ~ 1,
         TRUE ~ NA_integer_
@@ -99,14 +105,12 @@ fn_diabetes_algorithm <- function(data, column_mapping) {
     ) %>%
 
     ## --- Step 2: Prescribing data available? Denominator: Step 1 == No
-    ##------------: "No" if the person dies on or before the data prescribing data starts
+    ##------------: "No" if the person dies on or before the date prescribing data starts
     mutate(
       step_2 = case_when(
         step_1 == "No" &
-          (!is.na(tmp_first_prescribing_date) |
-            last_observable_date > tmp_first_prescribing_date) ~ "Yes",
-        step_1 == "No" &
-          (last_observable_date <= tmp_first_prescribing_date) ~ "No",
+          !is.na(tmp_prescribing_coverage_available)  ~ "Yes",
+        step_1 == "No" ~ "No",
         TRUE ~ NA_character_
       ) # NA will only be fulfilled for people not part of denominator
     ) %>%
@@ -210,7 +214,7 @@ mutate (
               # DM unlikely conditions
             (    step_1 == "No" & step_2 == "Yes" & step_3 == "No"  & step_4 == "No" & step_5 == "No" & step_6 == "No" & step_7 == "No" & step_8 == "No" & step_9 == "No") | 
                 (step_1 == "No" & step_2 == "Yes" & step_3 == "Yes" & step_3_1 == "No"                                                  & step_8 == "No" & step_9 == "No") |
-                (step_1 == "No" & step_2 == "No"  &                   step_4 == "No" & step_5 == "No" & step_6 == "No" & step_7 == "No" & step_8 == "No" & step_9 == "No")  ~ "DM unlikely",
+                (step_1 == "No" & step_2 == "No"  &                   step_4 == "No" & step_5 == "No" & step_6 == "No" & step_7 == "No" & step_8 == "No" & step_9 == "No")  ~ "DM_unlikely",
 
               # DM Not Otherwise Specified conditions
             (    step_1 == "No" & step_2 == "Yes" & step_3 == "No" & step_4 == "No" & step_5 == "No" & step_6 == "No" & step_7 == "No" & step_8 == "Yes") |
@@ -218,7 +222,7 @@ mutate (
                 (step_1 == "No" & step_2 == "Yes" & step_3 == "No" & step_4 == "No" & step_5 == "No" & step_6 == "No" & step_7 == "No" & step_8 == "No" & step_9 == "Yes") |
                 (step_1 == "No" & step_2 == "No"  &                  step_4 == "No" & step_5 == "No" & step_6 == "No" & step_7 == "No" & step_8 == "No" & step_9 == "Yes") |
                 (step_1 == "No" & step_2 == "Yes" & step_3 == "Yes" & step_3_1 == "No" &                                                 step_8 == "Yes") |
-                (step_1 == "No" & step_2 == "Yes" & step_3 == "Yes" & step_3_1 == "No" &                                                 step_8 == "No" & step_9 == "Yes") ~ "DM NOS",
+                (step_1 == "No" & step_2 == "Yes" & step_3 == "Yes" & step_3_1 == "No" &                                                 step_8 == "No" & step_9 == "Yes") ~ "DM_NOS",
               
 
               # T2DM conditions 
@@ -243,5 +247,13 @@ mutate (
       )
     ) %>%
     mutate(across(cat_diabetes, ~ replace_na(., "DM_unlikely")))
-  return(data)
+
+
+# Diagnosis date for only patients not classified as DM_unlikely
+mutate(diabetes_diag_date = case_when(
+    cat_diabetes != "DM_unlikely" ~ first_diabetes_diag_or_high_hba1c_date,
+    TRUE ~ as.Date(NA)))
+
+return(data)
 }
+

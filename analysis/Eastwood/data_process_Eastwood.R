@@ -405,7 +405,11 @@ core <- core %>%
 # Apply the diabetes algorithm
 ################################################################################
 print("Apply the diabetes algorithm")
-core <- fn_diabetes_algorithm(core, column_mapping, diagnosis_date_sources)
+core <- fn_diabetes_algorithm(
+  core,
+  column_mapping,
+  diagnosis_date_sources
+)
 
 ################################################################################
 # Merge the core back to the user data

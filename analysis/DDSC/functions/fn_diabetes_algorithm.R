@@ -54,7 +54,8 @@ fn_diabetes_algorithm <- function(data, column_mapping) {
         !is.na(t1dm_count_num) &
           !is.na(t2dm_count_num) &
           t2dm_count_num != 0 &
-          (t1dm_count_num / t2dm_count_num) > 1 ~ 1L,
+          (t1dm_count_num / t2dm_count_num) > 1 ~
+          1L,
         TRUE ~ NA_integer_
       ),
       # Create flag for on insulin within 1 year of diagnosis
@@ -64,15 +65,20 @@ fn_diabetes_algorithm <- function(data, column_mapping) {
           as.numeric(insulin_date - first_diabetes_diag_or_high_hba1c_date) >=
             0 &
           as.numeric(insulin_date - first_diabetes_diag_or_high_hba1c_date) <=
-            365 ~ 1,
+            365 ~
+          1,
         TRUE ~ NA_integer_
       ),
       # Date prescribing data starts: This is the earliest diabetes prescription date
-      tmp_first_prescribing_date = suppressWarnings(min(diabetes_medication_date, na.rm = TRUE)),
+      tmp_first_prescribing_date = suppressWarnings(min(
+        diabetes_medication_date,
+        na.rm = TRUE
+      )),
 
       tmp_prescribing_coverage_available = case_when(
-        is.finite(tmp_first_prescribing_date) & last_observable_date <= 
-        tmp_first_prescribing_date ~ NA_integer_,
+        is.finite(tmp_first_prescribing_date) &
+          last_observable_date <= tmp_first_prescribing_date ~
+          NA_integer_,
         TRUE ~ 1L
       ),
 
@@ -83,15 +89,17 @@ fn_diabetes_algorithm <- function(data, column_mapping) {
           as.numeric(
             last_observable_date - first_diabetes_diag_or_high_hba1c_date
           ) >
-            365 ~ 1, 
+            365 ~
+          1,
         TRUE ~ NA_integer_
       ),
       # Flag for greater than or equal to 2
       tmp_greater_than_2_step9 = case_when(
         (!is.na(antidiabetic_drug_date) +
-          !is.na(two_consecutive_high_hba1c_date) +
+          !is.na(two_consecutive_high_hba1c) +
             !is.na(insulin_date)) >=
-          2 ~ 1,
+          2 ~
+          1,
         TRUE ~ NA_integer_
       )
     ) %>%
@@ -109,7 +117,8 @@ fn_diabetes_algorithm <- function(data, column_mapping) {
     mutate(
       step_2 = case_when(
         step_1 == "No" &
-          !is.na(tmp_prescribing_coverage_available)  ~ "Yes",
+          !is.na(tmp_prescribing_coverage_available) ~
+          "Yes",
         step_1 == "No" ~ "No",
         TRUE ~ NA_character_
       ) # NA will only be fulfilled for people not part of denominator
@@ -122,7 +131,8 @@ fn_diabetes_algorithm <- function(data, column_mapping) {
           !is.na(tmp_not_currently_on_insulin) &
           !is.na(
             tmp_more_than_1year_date_diagnosis_to_last_observable_date
-          ) ~ "Yes",
+          ) ~
+          "Yes",
         step_2 == "Yes" ~ "No",
         TRUE ~ NA_character_
       ) # NA will only be fulfilled for people not part of denominator and for step_2 == No
@@ -179,7 +189,8 @@ fn_diabetes_algorithm <- function(data, column_mapping) {
       step_7 = case_when(
         step_6 == "No" & # this includes only people with both missing t1dm_date & t2dm_date (otherwise fished out further above)
           (tmp_age_1st_diag < 35) &
-          !is.na(tmp_insulin_within_1year_diag) ~ "Yes", # => Type 1 diabetes
+          !is.na(tmp_insulin_within_1year_diag) ~
+          "Yes", # => Type 1 diabetes
         step_6 == "No" ~ "No",
         TRUE ~ NA_character_
       ) # NA will only be fulfilled if not part of denominator.
@@ -204,7 +215,7 @@ fn_diabetes_algorithm <- function(data, column_mapping) {
       )
     ) %>%
 
-## -- Final Diabetes Classification --
+    ## -- Final Diabetes Classification --
 mutate (
   cat_diabetes = case_when(
 
@@ -248,12 +259,14 @@ mutate (
     ) %>%
     mutate(across(cat_diabetes, ~ replace_na(., "DM_unlikely")))
 
+  # Diagnosis date for only patients not classified as DM_unlikely
+  data <- data %>%
+    mutate(
+      diabetes_diag_date = case_when(
+        cat_diabetes != "DM_unlikely" ~ first_diabetes_diag_or_high_hba1c_date,
+        TRUE ~ as.Date(NA)
+      )
+    )
 
-# Diagnosis date for only patients not classified as DM_unlikely
-mutate(diabetes_diag_date = case_when(
-    cat_diabetes != "DM_unlikely" ~ first_diabetes_diag_or_high_hba1c_date,
-    TRUE ~ as.Date(NA)))
-
-return(data)
+  return(data)
 }
-

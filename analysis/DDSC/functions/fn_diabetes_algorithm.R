@@ -16,7 +16,7 @@ fn_diabetes_algorithm <- function(data, column_mapping) {
       ),
       insulin_date = all_of(column_mapping$insulin_date),
       # new variable
-      two_consecutive_high_hba1c = all_of(
+      two_consecutive_high_hba1c_date = all_of(
         column_mapping$two_consecutive_high_hba1c_date
       ),
       last_insulin_date = all_of(column_mapping$last_insulin_date),
@@ -96,7 +96,7 @@ fn_diabetes_algorithm <- function(data, column_mapping) {
       # Flag for greater than or equal to 2
       tmp_greater_than_2_step9 = case_when(
         (!is.na(antidiabetic_drug_date) +
-          !is.na(two_consecutive_high_hba1c) +
+          !is.na(two_consecutive_high_hba1c_date) +
             !is.na(insulin_date)) >=
           2 ~
           1,
@@ -220,7 +220,7 @@ mutate (
   cat_diabetes = case_when(
 
               # DM other conditions
-            (step_1 == "Yes" ) ~ "DM Other",
+            (step_1 == "Yes" ) ~ "DM_other",
 
               # DM unlikely conditions
             (    step_1 == "No" & step_2 == "Yes" & step_3 == "No"  & step_4 == "No" & step_5 == "No" & step_6 == "No" & step_7 == "No" & step_8 == "No" & step_9 == "No") | 

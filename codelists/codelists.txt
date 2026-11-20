@@ -11,7 +11,7 @@ bristol/diabetes-not-otherwise-specified/30baf311
 bristol/diabetes-not-otherwise-specified-icd10/658c9971
 
 nhsd-primary-care-domain-refsets/gestdiab_cod/247ec712
-bristol/gestational-diabetes-icd10/014ecc9d
+bristol/gestational-diabetes-icd10/41831973
 
 user/hjforbes/nondiagnostic-diabetes-codes/50f30a3b
 

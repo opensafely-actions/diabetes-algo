@@ -55,10 +55,10 @@
       "sha": "dace60e651a7ff2545aae5cece961fc652610b0e"
     },
     "bristol-gestational-diabetes-icd10.csv": {
-      "id": "bristol/gestational-diabetes-icd10/014ecc9d",
-      "url": "https://www.opencodelists.org/codelist/bristol/gestational-diabetes-icd10/014ecc9d/",
-      "downloaded_at": "2026-09-11 11:35:40.232394+00:00Z",
-      "sha": "5448acb577ff101f778fc12a045b58c265336da8"
+      "id": "bristol/gestational-diabetes-icd10/41831973",
+      "url": "https://www.opencodelists.org/codelist/bristol/gestational-diabetes-icd10/41831973/",
+      "downloaded_at": "2026-11-20 21:18:34.699527+00:00Z",
+      "sha": "669cfa3cb9ab584ff55ad793db9f7f6bb9ab10d8"
     },
     "user-hjforbes-nondiagnostic-diabetes-codes.csv": {
       "id": "user/hjforbes/nondiagnostic-diabetes-codes/50f30a3b",

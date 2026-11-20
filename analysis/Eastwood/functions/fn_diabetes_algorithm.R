@@ -267,7 +267,7 @@ fn_diabetes_algorithm <- function(
             step_4 == "No" &
             step_5 == "No" &
             step_6 == "No" &
-            step_7 == "No") ~ "DM unlikely",
+            step_7 == "No") ~ "DM_unlikely",
 
         # DM other conditions
         (step_1 == "No" &

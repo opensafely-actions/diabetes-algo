@@ -38,9 +38,8 @@ actions:
             dataset: output/input_Eastwood.arrow
     
   data_process_Eastwood_3:
-    run: r:v2 analysis/data_process.R
+    run: r:v2 analysis/data_process.R --algorithm=Eastwood
     config:
-      algorithm: Eastwood
       df_input: input_Eastwood.arrow
       remove_helper: FALSE
       gestationaldm_date_sources: gestationaldm_date

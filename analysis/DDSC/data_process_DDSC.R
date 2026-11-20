@@ -68,7 +68,7 @@ option_list <- list(
     "--t1dm_date",
     type = "character",
     default = "t1dm_date",
-    help = "Type 1 DM diagnosis date, from both primary (e.g. https://www.opencodelists.org/codelist/user/hjforbes/type-1-diabetes/674fbd7a/) and secondary (e.g. https://www.opencodelists.org/codelist/user/alainamstutz/type-1-diabetes-secondary-care/5eab6d93/) care [default %default]",
+    help = "Type 1 DM diagnosis date, from both primary (e.g. https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/dmtype1_cod/2d672380/) and secondary (e.g. https://www.opencodelists.org/codelist/bristol/type-1-diabetes-icd10/4c7d263c/) care [default %default]",
     metavar = "YYYY-MM-DD"
   ),
   make_option(
@@ -82,7 +82,7 @@ option_list <- list(
     "--t2dm_date",
     type = "character",
     default = "t2dm_date",
-    help = "Type 2 DM diagnosis date, from both primary (e.g. https://www.opencodelists.org/codelist/user/hjforbes/type-2-diabetes/3530d710/) and secondary (e.g. https://www.opencodelists.org/codelist/user/alainamstutz/type-2-diabetes-secondary-care/77bae0c8/) care [default %default]",
+    help = "Type 2 DM diagnosis date, from both primary (e.g. https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/dmtype2_cod/3ae4e34e/) and secondary (e.g. https://www.opencodelists.org/codelist/bristol/type-2-diabetes-icd10/58a5f4da/) care [default %default]",
     metavar = "YYYY-MM-DD"
   ),
   make_option(
@@ -96,21 +96,21 @@ option_list <- list(
     "--otherdm_date",
     type = "character",
     default = "otherdm_date",
-    help = "Other DM diagnosis date, from primary care (e.g. https://www.opencodelists.org/codelist/user/hjforbes/other-or-nonspecific-diabetes/0311f0a6/) only [default %default]",
+    help = "Diabetes of other specified aetiology diagnosis date, from primary care (e.g. https://www.opencodelists.org/codelist/bristol/diabetes-of-other-specified-aetiology/7be94cb0/) only [default %default]",
     metavar = "YYYY-MM-DD"
   ),
   make_option(
     "--nosdm_date",
     type = "character",
     default = "nosdm_date",
-    help = "NOS DM diagnosis date, from primary care (e.g. https://www.opencodelists.org/codelist/user/hjforbes/other-or-nonspecific-diabetes/0311f0a6/) only [default %default]",
+    help = "Diabetes not otherwise specified (NOS) diagnosis date, from both primary (e.g. https://www.opencodelists.org/codelist/bristol/diabetes-not-otherwise-specified/30baf311/) and secondary (e.g. https://www.opencodelists.org/codelist/bristol/diabetes-not-otherwise-specified-icd10/658c9971/) care [default %default]",
     metavar = "YYYY-MM-DD"
   ),
   make_option(
     "--two_consecutive_high_hba1c_date",
     type = "character",
     default = "two_consecutive_high_hba1c_date",
-    help = "Two consecutive high hba1c , from primary care only [default %default]",
+    help = "Date of the first of two consecutive high HbA1c readings (>= 48 mmol/mol, within 2 years of each other), from primary care (e.g. https://www.opencodelists.org/codelist/opensafely/glycated-haemoglobin-hba1c-tests-numerical-value/5134e926/) only [default %default]",
     metavar = "two_consecutive_high_hba1c_varname"
   ),
   make_option(
@@ -154,6 +154,13 @@ option_list <- list(
     default = "data_processed.csv.gz",
     help = "Output dataset. csv.gz or rds file. This is assumed to be added to the directory 'output' [default %default]",
     metavar = "filename.csv.gz"
+  ),
+  make_option(
+    "--algorithm",
+    type = "character",
+    default = "DDSC",
+    help = "Algorithm to run: Eastwood or DDSC (case-insensitive). If omitted, the action runs Eastwood",
+    metavar = "Eastwood/DDSC"
   ),
   make_option(
     "--config",

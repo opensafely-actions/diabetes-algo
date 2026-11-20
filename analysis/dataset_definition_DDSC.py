@@ -63,13 +63,13 @@ dataset.birth_date = patients.date_of_birth
 ## Type 1 Diabetes 
 # First date from primary+secondary care
 dataset.t1dm_date = minimum_of(
-    (first_matching_event_clinical_ctv3_before(diabetes_type1_ctv3, dataset.last_observable_date).date),
+    (first_matching_event_clinical_snomed_before(diabetes_type1_snomed, dataset.last_observable_date).date),
     (first_matching_event_apc_before(diabetes_type1_icd10, dataset.last_observable_date).admission_date)
 )
 
 
 # Type 1 diabetes count codes (individually and together, for diabetes algo)
-t1dm_primarycare_count = count_matching_event_clinical_ctv3_before(diabetes_type1_ctv3, dataset.last_observable_date)
+t1dm_primarycare_count = count_matching_event_clinical_snomed_before(diabetes_type1_snomed, dataset.last_observable_date)
 t1dm_hes_count = count_matching_event_apc_before(diabetes_type1_icd10, dataset.last_observable_date)
 dataset.t1dm_count_num = t1dm_primarycare_count + t1dm_hes_count
 
@@ -77,23 +77,26 @@ dataset.t1dm_count_num = t1dm_primarycare_count + t1dm_hes_count
 ## Type 2 Diabetes
 # First date from primary+secondary care
 dataset.t2dm_date = minimum_of(
-    (first_matching_event_clinical_ctv3_before(diabetes_type2_ctv3, dataset.last_observable_date).date),
+    (first_matching_event_clinical_snomed_before(diabetes_type2_snomed, dataset.last_observable_date).date),
     (first_matching_event_apc_before(diabetes_type2_icd10, dataset.last_observable_date).admission_date)
 )
 
 # Count codes (individually and together, for diabetes algo)
-t2dm_primarycare_count = count_matching_event_clinical_ctv3_before(diabetes_type2_ctv3, dataset.last_observable_date)
+t2dm_primarycare_count = count_matching_event_clinical_snomed_before(diabetes_type2_snomed, dataset.last_observable_date)
 t2dm_hes_count = count_matching_event_apc_before(diabetes_type2_icd10, dataset.last_observable_date)
 dataset.t2dm_count_num = t2dm_primarycare_count + t2dm_hes_count
 
 
 
 # Diabetes Other for DDSC algorithm
-dataset.otherdm_date = first_matching_event_clinical_ctv3_before(diabetes_other_ctv3, dataset.last_observable_date).date
+dataset.otherdm_date = first_matching_event_clinical_snomed_before(diabetes_other_snomed, dataset.last_observable_date).date
 
 # Diabetes Not otherwise specified (NOS) for DDSC algorithm
-# Using diabetes other as a placeholder for NOS until a codelist is created
-dataset.nosdm_date = first_matching_event_clinical_ctv3_before(diabetes_other_ctv3, dataset.last_observable_date).date
+# First date from primary+secondary care
+dataset.nosdm_date = minimum_of(
+    (first_matching_event_clinical_snomed_before(diabetes_nos_snomed, dataset.last_observable_date).date),
+    (first_matching_event_apc_before(diabetes_nos_icd10, dataset.last_observable_date).admission_date)
+)
 
 
 

@@ -8,7 +8,7 @@ actions:
         dataset: output/input_Eastwood.csv
 
   data_process_Eastwood:
-    run: r:v2 analysis/Eastwood/data_process_Eastwood.R --df_input input_Eastwood.csv --df_output data_processed.csv.gz
+    run: r:v2 analysis/data_process.R --algorithm=Eastwood --df_input input_Eastwood.csv --df_output data_processed.csv.gz
     needs:
     - generate_dataset_Eastwood
     outputs:
@@ -24,7 +24,7 @@ actions:
           dataset: output/input_Eastwood2.csv
   
   data_process_Eastwood_2:
-    run: r:v2 analysis/Eastwood/data_process_Eastwood.R --df_input input_Eastwood2.csv --df_output data_processed_2.csv.gz
+    run: r:v2 analysis/data_process.R --algorithm=Eastwood --df_input input_Eastwood2.csv --df_output data_processed_2.csv.gz
     needs:
     - generate_dataset_Eastwood_2
     outputs:
@@ -38,7 +38,7 @@ actions:
             dataset: output/input_Eastwood.arrow
     
   data_process_Eastwood_3:
-    run: r:v2 analysis/Eastwood/data_process_Eastwood.R
+    run: r:v2 analysis/data_process.R --algorithm=Eastwood
     config:
       df_input: input_Eastwood.arrow
       remove_helper: FALSE
@@ -60,7 +60,7 @@ actions:
               dataset: output/input_Eastwood4.csv.gz
       
   data_process_Eastwood_4:
-    run: r:v2 analysis/Eastwood/data_process_Eastwood.R --df_input input_Eastwood4.csv.gz --df_output data_processed_4.csv.gz
+    run: r:v2 analysis/data_process.R --algorithm=Eastwood --df_input input_Eastwood4.csv.gz --df_output data_processed_4.csv.gz
     needs:
     - generate_dataset_Eastwood_4
     outputs:
@@ -74,7 +74,7 @@ actions:
         dataset: output/input_DDSC.csv
 
   data_process_DDSC:
-    run: r:v2 analysis/DDSC/data_process_DDSC.R --df_input input_DDSC.csv --df_output data_processed.csv.gz
+    run: r:v2 analysis/data_process.R --algorithm=DDSC --df_input input_DDSC.csv --df_output data_processed.csv.gz
     needs:
     - generate_dataset_DDSC
     outputs:
@@ -90,7 +90,7 @@ actions:
           dataset: output/input_DDSC2.csv
   
   data_process_DDSC_2:
-    run: r:v2 analysis/DDSC/data_process_DDSC.R --df_input input_DDSC2.csv --df_output data_processed_2.csv.gz
+    run: r:v2 analysis/data_process.R --algorithm=DDSC --df_input input_DDSC2.csv --df_output data_processed_2.csv.gz
     needs:
     - generate_dataset_DDSC_2
     outputs:
@@ -104,8 +104,9 @@ actions:
             dataset: output/input_DDSC.arrow
     
   data_process_DDSC_3:
-    run: r:v2 analysis/DDSC/data_process_DDSC.R
+    run: r:v2 analysis/data_process.R
     config:
+      algorithm: DDSC
       df_input: input_DDSC.arrow
       remove_helper: FALSE
       gestationaldm_date_sources: gestationaldm_date
@@ -126,7 +127,7 @@ actions:
               dataset: output/input_DDSC4.csv.gz
       
   data_process_DDSC_4:
-    run: r:v2 analysis/DDSC/data_process_DDSC.R --df_input input_DDSC4.csv.gz --df_output data_processed_4.csv.gz
+    run: r:v2 analysis/data_process.R --algorithm=DDSC --df_input input_DDSC4.csv.gz --df_output data_processed_4.csv.gz
     needs:
     - generate_dataset_DDSC_4
     outputs:

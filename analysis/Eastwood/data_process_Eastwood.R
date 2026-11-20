@@ -73,7 +73,7 @@ option_list <- list(
     "--t1dm_date",
     type = "character",
     default = "t1dm_date",
-    help = "First type 1 DM diagnosis date, from both primary (e.g. https://www.opencodelists.org/codelist/user/hjforbes/type-1-diabetes/674fbd7a/) and secondary (e.g. https://www.opencodelists.org/codelist/user/alainamstutz/type-1-diabetes-secondary-care/5eab6d93/) care [default %default]",
+    help = "First type 1 DM diagnosis date, from both primary (e.g. https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/dmtype1_cod/2d672380/) and secondary (e.g. https://www.opencodelists.org/codelist/bristol/type-1-diabetes-icd10/4c7d263c/) care [default %default]",
     metavar = "YYYY-MM-DD"
   ),
   make_option(
@@ -94,7 +94,7 @@ option_list <- list(
     "--t2dm_date",
     type = "character",
     default = "t2dm_date",
-    help = "First type 2 DM diagnosis date, from both primary (e.g. https://www.opencodelists.org/codelist/user/hjforbes/type-2-diabetes/3530d710/) and secondary (e.g. https://www.opencodelists.org/codelist/user/alainamstutz/type-2-diabetes-secondary-care/77bae0c8/) care [default %default]",
+    help = "First type 2 DM diagnosis date, from both primary (e.g. https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/dmtype2_cod/3ae4e34e/) and secondary (e.g. https://www.opencodelists.org/codelist/bristol/type-2-diabetes-icd10/58a5f4da/) care [default %default]",
     metavar = "YYYY-MM-DD"
   ),
   make_option(
@@ -115,21 +115,21 @@ option_list <- list(
     "--otherdm_date",
     type = "character",
     default = "otherdm_date",
-    help = "First other/unspecified DM diagnosis date, from primary care (e.g. https://www.opencodelists.org/codelist/user/hjforbes/other-or-nonspecific-diabetes/0311f0a6/) only [default %default]",
+    help = "First other/unspecified DM diagnosis date, i.e. diabetes of other specified aetiology or not otherwise specified (NOS), from both primary (e.g. https://www.opencodelists.org/codelist/bristol/diabetes-of-other-specified-aetiology/7be94cb0/ and https://www.opencodelists.org/codelist/bristol/diabetes-not-otherwise-specified/30baf311/) and secondary (e.g. https://www.opencodelists.org/codelist/bristol/diabetes-not-otherwise-specified-icd10/658c9971/) care [default %default]",
     metavar = "YYYY-MM-DD"
   ),
   make_option(
     "--tmp_otherdm_count_num",
     type = "character",
     default = "tmp_otherdm_count_num",
-    help = "Count of all recorded other/unspecified DM diagnosis codes, from primary care only [default %default]",
+    help = "Count of all recorded other/unspecified DM diagnosis codes, from both primary and secondary care [default %default]",
     metavar = "otherdm_count_varname"
   ),
   make_option(
     "--gestationaldm_date",
     type = "character",
     default = "gestationaldm_date",
-    help = "First gestational DM diagnosis date, from both primary (e.g. https://www.opencodelists.org/codelist/user/hjforbes/gestational-diabetes/1ed423d1/) and secondary (e.g. https://www.opencodelists.org/codelist/user/alainamstutz/gestational-diabetes-icd10-bristol/474e7a09/) care [default %default]",
+    help = "First gestational DM diagnosis date, from both primary (e.g. https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/gestdiab_cod/247ec712/) and secondary (e.g. https://www.opencodelists.org/codelist/bristol/gestational-diabetes-icd10/41831973/) care [default %default]",
     metavar = "YYYY-MM-DD"
   ),
   make_option(
@@ -178,7 +178,7 @@ option_list <- list(
     "--tmp_nonmetform_drugs_dmd_date",
     type = "character",
     default = "tmp_nonmetform_drugs_dmd_date",
-    help = "First antidiabetic drug (any, except insulin and metformin) date, from primary care (e.g. https://www.opencodelists.org/codelist/user/alainamstutz/non-metformin-oral-antidiabetic/0641be78/) only [default %default]",
+    help = "First antidiabetic drug (any, except insulin and metformin) date, from primary care (e.g. https://www.opencodelists.org/codelist/bristol/non-metformin-oral-antidiabetic/683f5967/) only [default %default]",
     metavar = "YYYY-MM-DD"
   ),
   make_option(
@@ -229,6 +229,13 @@ option_list <- list(
     default = "data_processed.csv.gz",
     help = "Output dataset. csv.gz or rds file. This is assumed to be added to the directory 'output/Eastwood' [default %default]",
     metavar = "filename.csv.gz"
+  ),
+  make_option(
+    "--algorithm",
+    type = "character",
+    default = "Eastwood",
+    help = "Algorithm to run: Eastwood or DDSC (case-insensitive). If omitted, the action runs Eastwood",
+    metavar = "Eastwood/DDSC"
   ),
   make_option(
     "--config",

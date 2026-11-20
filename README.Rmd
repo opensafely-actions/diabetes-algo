@@ -2,17 +2,48 @@
 output: github_document
 ---
 
-<!-- README.md is generated from README.Rmd. 
+<!-- README.md is generated from README.Rmd.
 Please edit that file and rerun in R `rmarkdown::render('README.Rmd')` or run `just render` in a Terminal -->
 
 # diabetes-algo
 
 This is the code and configuration for `diabetes-algo`, which is an R reusable action for the OpenSAFELY framework.
 
-The action:
+The action implements two diabetes adjudication algorithms. Users choose which one to run with the `--algorithm` argument:
+
+| `--algorithm` | Algorithm | Input variables | Diabetes types (variable `cat_diabetes`) |
+|---|---|---|---|
+| `Eastwood` (default) | Eastwood algorithm (Figure 1 below) | 21 | GDM, T2DM, T1DM, DM_other, DM_unlikely |
+| `DDSC` | DDSC algorithm (see [DDSC_Algorithm_Results_V2_0.pdf](DDSC_Algorithm_Results_V2_0.pdf)) | 14 | T2DM, T1DM, DM_other, DM_NOS, DM_unlikely |
+
+The value is case-insensitive (e.g. `--algorithm=ddsc` also works). If `--algorithm` is not provided, the action runs the Eastwood algorithm, so existing projects keep working unchanged.
+The two algorithms need different input variables. The arguments for each are listed in the sections below.
+
+## Choosing the algorithm
+
+The algorithm can be chosen at the command line:
+
+```yaml
+diabetes_algo:
+  run: diabetes-algo:[version] --algorithm=DDSC --df_input=input.arrow
+```
+
+or with an `algorithm` key in the `config:`:
+
+```yaml
+diabetes_algo:
+  run: diabetes-algo:[version]
+  config:
+      algorithm: DDSC
+      df_input: input.arrow
+```
+
+## Eastwood algorithm (`--algorithm=Eastwood`, default)
+
+The Eastwood pipeline:
 
 - Loads and double-checks 21 input variables
-- Runs the diabetes adjudication algorithm (Figure 1 below) to define the following Diabetes types: 
+- Runs the diabetes adjudication algorithm (Figure 1 below) to define the following Diabetes types:
 -   Gestational, Type 2, Type 1, Other, Unlikely (variable 'cat_diabetes': GDM, T2DM, T1DM, DM_other, DM_unlikely)
 - Besides the categorical type variable, it provides the diagnosis date for each type. The default choice of diagnosis date sources for each type is:
 -   gestationaldm_date: First date from GDM clinical codes
@@ -20,14 +51,30 @@ The action:
 -   t1dm_date: First date from T1DM clinical codes, T2DM clinical codes, unspecific diabetes clinical codes, and diabetes medication codes
 -   otherdm_date: First date from T1DM clinical codes, T2DM clinical codes, unspecific diabetes clinical codes, diabetes medication codes, and diabetes-specific procedure codes
 - Version 0.0.10 allows users to change the above-mentioned default choice of diagnosis date sources and define their own sources, see args gestationaldm_date_sources, t1dm_date_sources, t2dm_date_sources, otherdm_date_sources
+- The output dataset is saved to `output/Eastwood/`
+
+## DDSC algorithm (`--algorithm=DDSC`)
+
+The DDSC pipeline:
+
+- Loads and double-checks 14 input variables
+- Runs the DDSC diabetes adjudication algorithm (see [DDSC_Algorithm_Results_V2_0.pdf](DDSC_Algorithm_Results_V2_0.pdf)) to define the following Diabetes types:
+-   Type 2, Type 1, Other, Not otherwise specified (NOS), Unlikely (variable 'cat_diabetes': T2DM, T1DM, DM_other, DM_NOS, DM_unlikely)
+-   Unlike the Eastwood algorithm, DDSC has no separate gestational diabetes category, and it distinguishes diabetes of other specified aetiology (DM_other) from diabetes not otherwise specified (DM_NOS)
+- Besides the categorical type variable, it provides one diagnosis date (variable 'diabetes_diag_date'): the first date of any diabetes diagnosis code (T1DM, T2DM, Other, NOS) or of the first of two consecutive high HbA1c readings, if more than a year before the first diabetes code. It is missing for DM_unlikely
+- The output dataset is saved to `output/DDSC/`
 
 ## Usage
 
 The input variables/arguments/options to the action are specified using the flags style (i.e., `--argname=argvalue`).
-Below, you find a detailed description of each input variable including examples for codelists to use when defining these variables in the OpenSAFELY dataset definition.
+Below, you find a detailed description of each input variable for each algorithm, including examples for codelists to use when defining these variables in the OpenSAFELY dataset definition.
 IMPORTANT: The used codelists here are just examples. Users have to double-check these. Important is to adhere to the specified source (primary or secondary care) where these codelists should come from.
 Copy-paste the argument names into your yaml and map them to your input variable names.
-An example of a dataset definition that defines each 21 input variables, find [here](https://github.com/alainamstutz/diabetes-algo/blob/main/analysis/dataset_definition.py). 
+Example dataset definitions that define all input variables can be found here:
+
+- Eastwood (21 input variables): [analysis/dataset_definition_Eastwood.py](https://github.com/opensafely-actions/diabetes-algo/blob/main/analysis/dataset_definition_Eastwood.py)
+- DDSC (14 input variables): [analysis/dataset_definition_DDSC.py](https://github.com/opensafely-actions/diabetes-algo/blob/main/analysis/dataset_definition_DDSC.py)
+
 ```{r, include=FALSE}
 # Taken from
 # https://github.com/yihui/knitr-examples/blob/master/077-wrap-output.Rmd
@@ -43,74 +90,119 @@ knit_hooks$set(output = function(x, options) {
   }
   hook_output(x, options)
 })
-```
-```{r, echo=FALSE, comment = '', linewidth=80}
-source_lines <- function(file, lines) {
-    source(textConnection(readLines(file)[lines]))
+
+# Prints the help of a data_process script: evaluates the lines from
+# `option_list <- list(` up to (and including) the OptionParser(...) call,
+# i.e. everything before `opt <- parse_args(...)`
+library(optparse)
+print_action_help <- function(file) {
+  lines <- readLines(file)
+  start <- grep("^option_list <- list\\(", lines)
+  end <- grep("^opt <- parse_args", lines) - 1
+  env <- new.env()
+  eval(parse(text = lines[start:end]), envir = env)
+  optparse::print_help(env$opt_parser)
 }
-# Note: in the following command the last line should be the line that
-# creates the opt_parser object using OptionParser(...)
-source_lines("analysis/Eastwood/data_process.R", 42:245)
-optparse::print_help(opt_parser)
 ```
 
-## Diabetes Adjudication Algorithm Flowchart
+### Eastwood arguments
+
+```{r, echo=FALSE, comment = '', linewidth=80}
+print_action_help("analysis/Eastwood/data_process_Eastwood.R")
+```
+
+### DDSC arguments
+
+```{r, echo=FALSE, comment = '', linewidth=80}
+print_action_help("analysis/DDSC/data_process_DDSC.R")
+```
+
+## Diabetes Adjudication Algorithm Flowchart (Eastwood)
 
 ```{r, fig.cap = "Figure 1.", fig.alt="Flowchart of the Diabetes adjudication algorithm", echo=FALSE}
 knitr::include_graphics("diabetes-algo_fig.png")
 ```
 
-This action can be specified in the `project.yaml` with its options at their default values as follows, 
+For the DDSC algorithm, see [DDSC_Algorithm_Results_V2_0.pdf](DDSC_Algorithm_Results_V2_0.pdf).
+
+## Example YAML
+
+This action can be specified in the `project.yaml` with its options at their default values as follows,
 where you should replace `[version]` with the latest tag from
 [here](https://github.com/opensafely-actions/diabetes-algo/tags), e.g., `v0.0.1`.
 Note that no space is allowed between `diabetes-algo:` and `[version]`.
 This action can be run specifying input arguments as follows (in YAML ">" indicates to treat the subsequent nested lines as a single line).
 
+Eastwood:
+
 ```yaml
-generate_dataset:
-    run: ehrql:v1 generate-dataset analysis/dataset_definition.py --output output/input.arrow
+generate_dataset_Eastwood:
+    run: ehrql:v1 generate-dataset analysis/dataset_definition_Eastwood.py --output output/input_Eastwood.arrow
     outputs:
       highly_sensitive:
-        dataset: output/input.arrow
+        dataset: output/input_Eastwood.arrow
 
-diabetes_algo:
+diabetes_algo_Eastwood:
   run: >
     diabetes-algo:[version]
+      --algorithm=Eastwood
+      --df_input=input_Eastwood.arrow
       --birth_date=your_dob_date_variable
       --tmp_t1dm_primarycare_date=your_t1dm_from_primcare_date_variable
       --tmp_max_hba1c_mmol_mol_num=your_max_hba1c_num_variable
       --## more arguments
       --df_output=data_processed.csv.gz #or data_processed.rds
   needs:
-  - generate_dataset
+  - generate_dataset_Eastwood
   outputs:
     highly_sensitive:
-      csv.gz: output/data_processed.csv.gz #or data_processed.rds
+      csv.gz: output/Eastwood/data_processed.csv.gz #or data_processed.rds
 ```
 
-Alternatively, the input arguments can also be specified using a `config:` key in the YAML as follows.
+DDSC:
+
+```yaml
+generate_dataset_DDSC:
+    run: ehrql:v1 generate-dataset analysis/dataset_definition_DDSC.py --output output/input_DDSC.arrow
+    outputs:
+      highly_sensitive:
+        dataset: output/input_DDSC.arrow
+
+diabetes_algo_DDSC:
+  run: >
+    diabetes-algo:[version]
+      --algorithm=DDSC
+      --df_input=input_DDSC.arrow
+      --birth_date=your_dob_date_variable
+      --last_observable_date=your_last_observable_date_variable
+      --nosdm_date=your_diabetes_nos_date_variable
+      --## more arguments
+      --df_output=data_processed.csv.gz #or data_processed.rds
+  needs:
+  - generate_dataset_DDSC
+  outputs:
+    highly_sensitive:
+      csv.gz: output/DDSC/data_processed.csv.gz #or data_processed.rds
+```
+
+Alternatively, the input arguments (including `algorithm`) can also be specified using a `config:` key in the YAML as follows.
 Input arguments specified in the config overwrite those specified at the command line.
 
 ```yaml
-generate_dataset:
-    run: ehrql:v1 generate-dataset analysis/dataset_definition.py --output output/input.arrow
-    outputs:
-      highly_sensitive:
-        dataset: output/input.arrow
-
 diabetes_algo_via_config:
   run: diabetes-algo:[version]
   config:
-      df_input: input.arrow
+      algorithm: DDSC
+      df_input: input_DDSC.arrow
       birth_date: your_dob_date_variable
-      tmp_t1dm_primarycare_date: your_t1dm_from_primcare_date_variable
+      nosdm_date: your_diabetes_nos_date_variable
       ## more arguments
       df_output: data_processed.csv.gz #or data_processed.rds
   needs:
-  - generate_dataset
+  - generate_dataset_DDSC
   outputs:
     highly_sensitive:
-      csv.gz: output/data_processed.csv.gz #or data_processed.rds
+      csv.gz: output/DDSC/data_processed.csv.gz #or data_processed.rds
 ```
 
 For more information about reusable actions see [here](https://docs.opensafely.org/actions-reusable/).
